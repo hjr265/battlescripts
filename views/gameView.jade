@@ -1,0 +1,27 @@
+extends layout
+
+block container
+	.page-header
+		h1 Battle between "#{game.user}" and "#{game.other}"
+	
+	.panel.panel-default
+		.panel-body
+			.row
+				for grid in game.state.grids
+					.col-md-6
+						table.table.table-bordered
+							tbody
+								for row in grid
+									tr
+										for square in row
+											td.text-center(class='#{square.attacked ? (square.pieceNo >= 0 ? "danger" : "warning") : ""}')
+												if square.pieceNo >= 0
+													| #{square.pieceNo}
+												else
+													| &nbsp;
+					
+		hr
+		.panel-body
+			ul
+				for record in game.state.records
+					li Player(#{record.playerNo}) #{record.event} #{JSON.stringify(record.data)}

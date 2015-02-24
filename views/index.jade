@@ -1,0 +1,37 @@
+extends layout
+
+block container
+	if !user
+		.row
+			.col-xs-4.col-xs-offset-4
+				h1 Hello, stranger!
+				p Pick a username. No password required; this is utopia.
+				form(method='get')
+					.form-group
+						input.form-control(name='user' placeholder='Username')
+
+					button.btn.btn-primary Login
+	
+	else
+		.page-header
+			h1 Hello, #{user}!
+				
+		.panel.panel-default
+			.panel-body
+				h2 My Code
+				form(method='post')
+					.form-group
+						textarea.form-control(name='player[code]' rows='8') #{player ? player.code : ''}
+					
+					button.btn.btn-primary(type='submit') Submit
+							
+		.panel.panel-default
+			.panel-body
+				h2 Others
+				ul.list-group
+					for other in others
+						li.list-group-item
+							form.pull-right(method='post' action='/games?user=#{user}&other=#{other.user}')
+								button.btn.btn-link.btn-xs(type='submit') Battle!
+							| #{other.user}
+							
