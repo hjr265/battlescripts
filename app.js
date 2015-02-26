@@ -72,7 +72,7 @@ app.route('/games')
 app.route('/games/:id')
 .get(function(req, res, next) {
 	Game.findOne()
-	.where('id', req.query.id)
+	.where('_id', req.params.id)
 	.populate('players')
 	.exec(function(err, game) {
 		if(err) {
