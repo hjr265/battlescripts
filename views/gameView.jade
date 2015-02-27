@@ -2,7 +2,7 @@ extends layout
 
 block container
 	.page-header
-		h1 Battle between "#{game.user}" and "#{game.other}"
+		h1 Battle between "#{game.players[0].user}" and "#{game.players[1].user}"
 
 	.panel.panel-default
 		.panel-body
@@ -21,11 +21,7 @@ block container
 			.row
 				for grid, playerNo in game.state.grids
 					.col-md-6
-						h3
-							if playerNo === 0
-								| #{game.user}
-							else
-								| #{game.other}
+						h3 #{game.players[playerNo].user}
 						table.table.table-bordered
 							tbody
 								tr
@@ -51,10 +47,7 @@ block container
 					h4 ridwan won!
 				for record in game.state.records.reverse()
 					li(data-record='#{JSON.stringify(record)}')
-						if record.playerNo === 0
-							b #{game.user}
-						else
-							b #{game.other}
+						b #{game.players[record.playerNo].user}
 						|  #{record.event}
 						case record.event
 							when 'attacked'

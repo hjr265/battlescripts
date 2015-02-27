@@ -23,10 +23,8 @@ var app = express()
 app.route('/games')
 .post(function(req, res, next) {
 	var game = new Game()
-	game.user = req.query.user
-	game.other = req.query.other
 
-	async.map([
+	async.mapSeries([
 		req.query.user,
 		req.query.other
 	], function(user, done) {
@@ -36,6 +34,8 @@ app.route('/games')
 			if(err) {
 				return done(err)
 			}
+
+			game.players.push(player)
 
 			var script = new vm.Script(player.code)
 			var context = {}
