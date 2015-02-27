@@ -57,6 +57,7 @@ app.route('/games')
 			game.state.grids = engine.grids
 			game.state.records = engine.records
 			game.state.pieces = engine.pieces
+			game.state.winner.playerNo = engine.records[engine.records.length-1].playerNo
 
 			game.save(function(err, game) {
 				if(err) {

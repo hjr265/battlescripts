@@ -44,7 +44,7 @@ block container
 		.panel-body
 			ul.ul-records
 				p
-					h4 ridwan won!
+					h4 #{game.players[game.state.winner.playerNo].user} won!
 				for record in game.state.records.reverse()
 					li(data-record='#{JSON.stringify(record)}')
 						b #{game.players[record.playerNo].user}
