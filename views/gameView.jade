@@ -42,6 +42,9 @@ block container
 													| #{square.pieceNo}
 												else
 													| &nbsp;
+						p.count
+							span #{game.state.records.reduce(function(m, v) { return m + (v.playerNo === playerNo ? 1 : 0) }, 0)}
+							|  move(s)
 
 		hr
 		.panel-body
@@ -98,6 +101,7 @@ block append scripts
 				if(i === 0) {
 					$('.ul-records h4').hide()
 					$('table td').removeClass('warning danger')
+					$('.count span').text(0)
 				}
 
 				$('.ul-records li').slice(0, $('.ul-records li').length-i).hide()
@@ -111,6 +115,8 @@ block append scripts
 					$td.addClass('warning')
 				}
 				++i
+
+				$('.count span').eq(record.playerNo).text(parseInt($('.count span').eq(record.playerNo).text())+1)
 
 				var delay = 0
 				switch(true) {
