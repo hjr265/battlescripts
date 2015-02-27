@@ -7,6 +7,16 @@ block container
 	.panel.panel-default
 		.panel-body
 			.row
+				.col-md-6
+					button.btn.btn-primary.btn-play Play
+					button.btn.btn-primary.btn-stop(style='display: none;') Stop
+				.col-md-6.text-right
+					.btn-group
+						button.btn.btn-default.btn-fast.active Fast
+						button.btn.btn-default.btn-slow Slow
+			br
+				
+			.row
 				for grid in game.state.grids
 					.col-md-6
 						table.table.table-bordered
@@ -22,6 +32,84 @@ block container
 					
 		hr
 		.panel-body
-			ul
+			ul.ul-records
 				for record in game.state.records
 					li Player(#{record.playerNo}) #{record.event} #{JSON.stringify(record.data)}
+
+block append scripts
+	script(type='text/javascript').
+		(function() {
+			var i = 0
+			var records = []
+			
+			$('.ul-records li').each(function() {
+				var parts = $(this).text().split(' ')
+				var playerNo = parseInt(parts[0].match(/\d/))
+				var event = parts[1]
+				var data = JSON.parse(parts[2])
+				
+				records.push({
+					playerNo: playerNo,
+					event: event,
+					data: data
+				})
+			})
+			
+			var playTimer = null
+		
+			function play() {
+				$('.btn-play').hide()
+				$('.btn-stop').show()
+				
+				if(i === records.length) {
+					i = 0
+					stop()
+					return
+				}
+				if(i === 0) {
+					$('table td').removeClass('warning danger')
+				}
+				
+				var record = records[i]
+				console.log(record)
+				var $td = $('table').eq((record.playerNo+1)%2).find('tr').eq(record.data.y).find('td').eq(record.data.x)
+				if(parseInt($td.text()) >= 0) {
+					$td.addClass('danger')
+				} else {
+					$td.addClass('warning')
+				}
+				++i
+				
+				var delay = 0
+				switch(true) {
+					case $('.btn-fast').hasClass('active'):
+						delay = 10
+						break
+							
+					case $('.btn-slow').hasClass('active'):
+						delay = 100
+						break
+				}
+				playTimer = setTimeout(function() {
+					play()
+				}, delay)
+			}
+			
+			function stop() {
+				$('.btn-stop').hide()
+				$('.btn-play').show()
+				
+				clearTimeout(playTimer)
+			}
+			
+			$('.btn-play').click(function() {
+				play()
+			})
+			$('.btn-stop').click(function() {
+				stop()
+			})
+			
+			$('.btn-fast, .btn-slow').on('click', function() {
+				$(this).addClass('active').siblings().removeClass('active')
+			})
+		})()
