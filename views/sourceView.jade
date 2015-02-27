@@ -1,0 +1,10 @@
+extends layout
+
+block container
+	.page-header
+		h1 Battle between "#{game.players[0].user}" and "#{game.players[1].user}"
+
+	.panel.panel-default
+		.panel-body
+			h3 #{user}
+			pre.pre-scrollable #{code}

@@ -87,6 +87,38 @@ app.route('/games/:id')
 
 })
 
+app.route('/games/:id/sources/:user')
+.get(function(req, res, next) {
+	Game.findOne()
+	.where('_id', req.params.id)
+	.exec(function(err, game) {
+		if(err) {
+			return next(err)
+		}
+
+		if(!game) {
+			return res.send(404)
+		}
+
+		var okay = false
+		game.players.forEach(function(player) {
+			if(player.user === req.params.user) {
+				okay = true
+
+				res.header['content-type'] = 'text/plain'
+				return res.render('sourceView', {
+					game: game,
+					user: player.user,
+					code: player.code
+				})
+			}
+		})
+		if(!okay) {
+			return res.send(404)
+		}
+	})
+})
+
 app.route('/')
 .get(function(req, res, next) {
 	if(req.query.user) {
