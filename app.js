@@ -24,7 +24,7 @@ var app = express()
 .use(require('body-parser').urlencoded())
 .use(express.static(__dirname+'/public'))
 .use(require('cookie-session')({
-	keys: process.env.SECRET.split(',')
+	keys: (process.env.SECRET || process.env.SECURE_KEY).split(',')
 }))
 .use(passport.initialize())
 .use(passport.session())
