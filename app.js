@@ -1,11 +1,7 @@
 var async = require('async')
-var Bot = require('./lib/bot')
-var Engine = require('./lib/engine')
 var express = require('express')
-var Game = require('./lib/game')
 var mongoose = require('mongoose')
 var passport = require('passport')
-var Player = require('./lib/player')
 var User = require('./lib/user')
 var vm = require('vm')
 
