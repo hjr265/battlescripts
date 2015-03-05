@@ -1,0 +1,18 @@
+extends layout
+
+block container
+	.page-header
+		h1 Hello, #{user.name}!
+	
+	.panel.panel-default
+		.panel-body
+			h2 Edit Bot: #{bot.name}
+			
+		.panel-body
+			form(method='post')
+				.form-group
+					input.form-control(name='name' rows='8' placeholder='Name' value='#{bot.name}')
+				.form-group
+					textarea.form-control(name='code' rows='8' placeholder='Code') #{bot.code}
+				
+				button.btn.btn-primary(type='submit') Save

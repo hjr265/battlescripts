@@ -1,4 +1,5 @@
 var async = require('async')
+var Bot = require('./lib/bot')
 var Engine = require('./lib/engine')
 var express = require('express')
 var Game = require('./lib/game')
@@ -130,34 +131,83 @@ app.route('/games/:id/sources/:user')
 	})
 })
 
+app.route('/my-bots')
+.get(function(req, res, next) {
+	Bot.findByAuthor(req.user, function(err, bots) {
+		if(err) {
+			return next(err)
+		}
+
+		res.render('my-bots', {
+			user: req.user,
+			bots: bots
+		})
+	})
+})
+
+app.route('/my-bots/new')
+.get(function(req, res, next) {
+	res.render('bot-new', {
+		user: req.user
+	})
+})
+.post(function(req, res, next) {
+	var bot = new Bot()
+	bot.author = req.user
+	bot.name = req.body.name
+	bot.code = req.body.code
+	bot.save(function(err) {
+		if(err) {
+			return next(err)
+		}
+
+		res.redirect('/my-bots')
+	})
+})
+
+app.route('/my-bots/:id')
+.all(function(req, res, next) {
+	Bot.findById(req.params.id, function(err, bot) {
+		if(err) {
+			return next(err)
+		}
+		if(!bot) {
+			return res.send(404)
+		}
+		if(bot.author.toString() !== req.user.id.toString()) {
+			return res.send(401)
+		}
+
+		req.bot = bot
+		next()
+	})
+})
+.get(function(req, res, next) {
+	res.render('bot-edit', {
+		user: req.user,
+		bot: req.bot
+	})
+})
+.post(function(req, res, next) {
+	var bot = req.bot
+	bot.name = req.body.name
+	bot.code = req.body.code
+	bot.save(function(err) {
+		if(err) {
+			return next(err)
+		}
+
+		res.redirect('/my-bots')
+	})
+})
+
 app.route('/')
 .get(function(req, res, next) {
 	if(!req.user) {
 		return res.render('login')
 	}
 
-	Player.findOne()
-	.where('user', req.user)
-	.exec(function(err, player) {
-		if(err) {
-			return next(err)
-		}
-
-		Player.find()
-		.where('user').ne(req.user)
-		.populate('user')
-		.exec(function(err, others) {
-			if(err) {
-				return next(err)
-			}
-
-			res.render('index', {
-				user: req.user,
-				player: player,
-				others: others
-			})
-		})
-	})
+	res.redirect('/my-bots')
 })
 .post(function(req, res, next) {
 	if(!req.user) {
