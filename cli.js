@@ -1,4 +1,43 @@
+var mongoose = require('mongoose')
+
+mongoose.connect(process.env.MONGO_URL || process.env.MONGOLAB_URI, function(err) {
+	if(err) {
+		console.log(err)
+		process.exit(1)
+	}
+})
+
 switch(process.argv[2]) {
+	case 'users:add-role':
+		var User = require('./lib/user')
+
+		var email = process.argv[3]
+		var roleName = process.argv[4]
+		User.findByEmail(email, function(err, user) {
+			if(err) {
+				console.log(err)
+				return process.exit(1)
+			}
+
+			if(!user) {
+				console.log('user not found')
+				return process.exit(1)
+			}
+			if(user.roles.indexOf(roleName) === -1) {
+				user.roles.push(roleName)
+				user.markModified('roles')
+			}
+			user.save(function(err) {
+				if(err) {
+					console.log(err)
+					return process.exit(1)
+				}
+
+				process.exit(0)
+			})
+		})
+		break
+
 	case 'play':
 		var Engine = require('./lib/engine')
 		var consts = require('./lib/consts')

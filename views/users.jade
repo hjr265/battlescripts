@@ -1,0 +1,13 @@
+extends layout
+
+block container
+	.page-header
+		h1 Hello, #{user.name}!
+	
+	.panel.panel-default
+		.panel-body
+			h2 Users
+				
+		.list-group
+			for user in users
+				a.list-group-item(href='/users/#{user.id}') #{user.name}
