@@ -1,0 +1,12 @@
+extends layout
+
+block container
+	.page-header
+		h1 Hello, #{user.name}!
+	
+	.panel.panel-default
+		.panel-body
+			h2 Bot: #{bot.name}
+				
+		.panel-body
+			pre.pre-scrollable #{bot.code}

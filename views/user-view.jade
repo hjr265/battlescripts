@@ -1,0 +1,17 @@
+extends layout
+
+block container
+	.page-header
+		h1 Hello, #{user.name}!
+	
+	.panel.panel-default
+		.panel-body
+			h2 User: #{other.name}
+				
+		.panel-body
+			h4 Bots
+		
+		.list-group
+			for bot in bots
+				a.list-group-item(href='/bots/#{bot.id}') #{bot.name}
+	
