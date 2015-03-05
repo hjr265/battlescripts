@@ -3,7 +3,9 @@ var Engine = require('./lib/engine')
 var express = require('express')
 var Game = require('./lib/game')
 var mongoose = require('mongoose')
+var passport = require('passport')
 var Player = require('./lib/player')
+var User = require('./lib/user')
 var vm = require('vm')
 
 mongoose.connect(process.env.MONGO_URL || process.env.MONGOLAB_URI, function(err) {
@@ -19,6 +21,11 @@ var app = express()
 .use(require('morgan')('combined'))
 .use(require('body-parser').urlencoded())
 .use(express.static(__dirname+'/public'))
+.use(require('express-session')({
+	secret: process.env.SECRET
+}))
+.use(passport.initialize())
+.use(passport.session())
 
 app.route('/games')
 .post(function(req, res, next) {
@@ -75,6 +82,10 @@ app.route('/games/:id')
 	Game.findOne()
 	.where('_id', req.params.id)
 	.populate('players')
+	.populate({
+		path: 'players.user',
+		model: 'User'
+	})
 	.exec(function(err, game) {
 		if(err) {
 			return next(err)
@@ -121,62 +132,108 @@ app.route('/games/:id/sources/:user')
 
 app.route('/')
 .get(function(req, res, next) {
-	if(req.query.user) {
-		Player.findOne()
-		.where('user', req.query.user)
-		.exec(function(err, player) {
+	if(!req.user) {
+		return res.render('login')
+	}
+
+	Player.findOne()
+	.where('user', req.user)
+	.exec(function(err, player) {
+		if(err) {
+			return next(err)
+		}
+
+		Player.find()
+		.where('user').ne(req.user)
+		.populate('user')
+		.exec(function(err, others) {
 			if(err) {
 				return next(err)
 			}
 
-			Player.find()
-			.where('user').ne(req.query.user)
-			.exec(function(err, others) {
-				if(err) {
-					return next(err)
-				}
-
-				res.render('index', {
-					user: req.query.user,
-					player: player,
-					others: others
-				})
+			res.render('index', {
+				user: req.user,
+				player: player,
+				others: others
 			})
 		})
-
-	} else {
-		res.render('index')
-	}
+	})
 })
 .post(function(req, res, next) {
-	if(!req.query.user) {
+	if(!req.user) {
 		return res.redirect('/')
+	}
 
-	} else {
-		Player.findOne()
-		.where('user', req.query.user)
-		.exec(function(err, player) {
+	Player.findOne()
+	.where('user', req.user)
+	.exec(function(err, player) {
+		if(err) {
+			return next(err)
+		}
+
+		if(!player) {
+			player = new Player()
+			player.user = req.user
+		}
+		player.code = req.body.player.code
+
+		player.save(function(err) {
 			if(err) {
 				return next(err)
 			}
 
-			if(!player) {
-				player = new Player()
-				player.user = req.query.user
-			}
-			player.code = req.body.player.code
-
-			player.save(function(err) {
-				if(err) {
-					return next(err)
-				}
-
-				return res.redirect('/?user='+req.query.user)
-			})
+			return res.redirect('/')
 		})
-	}
+	})
 })
+
+app.route('/auth/facebook')
+.get(passport.authenticate('facebook', {
+	scope: ['email']
+}))
+
+app.route('/auth/facebook/callback')
+.get(passport.authenticate('facebook', {
+	successRedirect: '/',
+	failureRedirect: '/login'
+}))
 
 app.listen(process.env.PORT, function() {
 	console.log('Listening on '+process.env.PORT)
 })
+
+passport.serializeUser(function(user, done) {
+	done(null, user.id)
+})
+
+passport.deserializeUser(function(id, done) {
+	User.findById(id, done)
+})
+
+passport.use(new (require('passport-facebook').Strategy)({
+	clientID: process.env.FACEBOOK_APP_ID,
+	clientSecret: process.env.FACEBOOK_APP_SECRET,
+	callbackURL: process.env.BASE+'/auth/facebook/callback'
+}, function(accessToken, refreshToken, profile, done) {
+	User.findByEmail(profile.emails.map(function(email) {
+		return email.value
+	}), function(err, user) {
+		if(err) {
+			return done(err)
+		}
+		if(!user) {
+			user = User.createFromFacebook(profile)
+		}
+
+		user.profiles.facebook.accessToken = accessToken
+		user.profiles.facebook.refreshToken = refreshToken
+		user.save(function(err) {
+			if(err) {
+				return done(err)
+			}
+
+			console.log('saved')
+			done(null, user)
+		})
+	})
+}))

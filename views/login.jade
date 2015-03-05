@@ -1,0 +1,14 @@
+extends layout
+
+block container
+	.row
+		.col-xs-4.col-xs-offset-4
+			h1 Hello, stranger!
+			p Login using one of your profiles:
+			ul
+				li 
+					a(href='/auth/twitter') Twitter
+				li 
+					a(href='/auth/facebook') Facebook
+				li 
+					a(href='/auth/google') Google

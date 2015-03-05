@@ -2,7 +2,7 @@ extends layout
 
 block container
 	.page-header
-		h1 Battle between "#{game.players[0].user}" and "#{game.players[1].user}"
+		h1 Battle between "#{game.players[0].user.name}" and "#{game.players[1].user.name}"
 
 	.panel.panel-default
 		.panel-body
@@ -21,7 +21,7 @@ block container
 			.row
 				for grid, playerNo in game.state.grids
 					.col-md-6
-						h3 #{game.players[playerNo].user}
+						h3 #{game.players[playerNo].user.name}
 							small  (
 								a(href='/games/#{game.id}/sources/#{game.players[playerNo].user}' target='_blank') source
 								| )
@@ -50,10 +50,10 @@ block container
 		.panel-body
 			ul.ul-records
 				p
-					h4 #{game.players[game.state.winner.playerNo].user} won!
+					h4 #{game.players[game.state.winner.playerNo].user.name} won!
 				for record in game.state.records.reverse()
 					li(data-record='#{JSON.stringify(record)}')
-						b #{game.players[record.playerNo].user}
+						b #{game.players[record.playerNo].user.name}
 						|  #{record.event}
 						case record.event
 							when 'attacked'
