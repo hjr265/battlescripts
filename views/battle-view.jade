@@ -1,0 +1,165 @@
+extends layout
+
+block container
+	.page-header
+		h1 Battle between "#{battle.parties[0].bot.name}" and "#{battle.parties[1].bot.name}"
+
+	.panel.panel-default
+		.panel-body
+			.row
+				.col-md-6
+					button.btn.btn-primary.btn-play Play
+					button.btn.btn-primary.btn-stop(style='display: none;') Stop
+				.col-md-6.text-right
+					.btn-group
+						button.btn.btn-default.btn-fast.active Fast
+						button.btn.btn-default.btn-slow Slow
+						button.btn.btn-default.btn-slower Slower
+						button.btn.btn-default.btn-step Step
+			br
+
+			.row
+				for party, botNo in battle.parties
+					.col-md-6
+						h3 #{party.bot.name}
+							small  &mdash; by #{party.user.name}
+						table.table.table-bordered
+							tbody
+								tr
+									td &nbsp;
+									for c in 'ABCDEFGHIJ'
+										td.text-center
+											b #{c}
+								for row, r in party.grid
+									tr
+										td.text-center
+											b #{r+1}
+										for cell in row
+											td.text-center(class='#{cell.attacked ? (cell.pieceNo >= 0 ? "danger" : "warning") : ""}')
+												if cell.pieceNo >= 0
+													| #{cell.pieceNo}
+												else
+													| &nbsp;
+						p.count
+							span #{battle.moves.reduce(function(m, v) { return m + (v.botNo === botNo ? 1 : 0) }, 0)}
+							|  move(s)
+
+		hr
+		.panel-body
+			ul.ul-moves
+				p
+					for party in battle.parties
+						if party.winner
+							h4 #{party.bot.name} won!
+				for move in battle.moves.reverse()
+					li(data-move='#{JSON.stringify(move)}')
+						b #{battle.parties[move.botNo].bot.name}
+						|  #{move.event}
+						if move.okay
+							|  #{'ABCDEFGHIJ'[move.data.y]}#{move.data.x+1}
+							|  &mdash;
+							if move.data.baam
+								|  and hit a <b>#{battle.parties[(move.botNo+1)%2].pieces[battle.parties[(move.botNo+1)%2].grid[move.data.y][move.data.x].pieceNo].kind}</b>!
+							else
+								|  and missed..
+
+block append styles
+	style(type='text/css').
+		table td {
+			width: 54px;
+			-webkit-transition: background-color 100ms linear;
+			-moz-transition: background-color 100ms linear;
+			-o-transition: background-color 100ms linear;
+			-ms-transition: background-color 100ms linear;
+			transition: background-color 100ms linear;
+		}
+
+block append scripts
+	script(type='text/javascript').
+		(function() {
+			var i = 0
+			var moves = []
+
+			$('.ul-moves li').each(function() {
+				moves.unshift($(this).data('move'))
+			})
+
+			var playTimer = null
+
+			function play() {
+				$('.btn-play').hide()
+				$('.btn-stop').show()
+
+				if(i === moves.length) {
+					i = 0
+					stop()
+					$('.ul-moves h4').fadeIn()
+					return
+				}
+				if(i === 0) {
+					$('.ul-moves h4').hide()
+					$('table td').removeClass('warning danger')
+					$('.count span').text(0)
+				}
+
+				$('.ul-moves li').slice(0, $('.ul-moves li').length-i).hide()
+				$('.ul-moves li').slice($('.ul-moves li').length-i-1).show()
+
+				var move = moves[i]
+				var $td = $('table').eq((move.botNo+1)%2).find('tr').eq(move.data.y+1).find('td').eq(move.data.x+1)
+				if(parseInt($td.text()) >= 0) {
+					$td.addClass('danger')
+				} else {
+					$td.addClass('warning')
+				}
+				++i
+
+				$('.count span').eq(move.botNo).text(parseInt($('.count span').eq(move.botNo).text())+1)
+
+				var delay = 0
+				switch(true) {
+					case $('.btn-fast').hasClass('active'):
+						delay = 10
+						break
+
+					case $('.btn-slow').hasClass('active'):
+						delay = 100
+						break
+
+					case $('.btn-slower').hasClass('active'):
+						delay = 500
+						break
+
+					case $('.btn-step').hasClass('active'):
+						stop()
+						return
+				}
+				playTimer = setTimeout(function() {
+					play()
+				}, delay)
+			}
+
+			function stop() {
+				$('.btn-stop').hide()
+				$('.btn-play').show()
+
+				clearTimeout(playTimer)
+			}
+
+			$('.btn-play').click(function() {
+				play()
+			})
+			$('.btn-stop').click(function() {
+				stop()
+			})
+
+			$('.btn-fast, .btn-slow, .btn-slower, .btn-step').on('click', function() {
+				$(this).addClass('active').siblings().removeClass('active')
+
+				if($('.btn-step').hasClass('active')) {
+					$('.btn-play').text('Next')
+				} else {
+					$('.btn-play').text('Play')
+				}
+			})
+		})()
