@@ -17,13 +17,14 @@ mongoose.connect(process.env.MONGO_URL || process.env.MONGOLAB_URI, function(err
 })
 
 var app = express()
+.set('trust proxy', 1)
 .set('views', __dirname+'/views')
 .set('view engine', 'jade')
 .use(require('morgan')('combined'))
 .use(require('body-parser').urlencoded())
 .use(express.static(__dirname+'/public'))
-.use(require('express-session')({
-	secret: process.env.SECRET
+.use(require('cookie-session')({
+	keys: process.env.SECRET.split(',')
 }))
 .use(passport.initialize())
 .use(passport.session())
