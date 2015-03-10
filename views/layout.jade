@@ -37,6 +37,14 @@ html
 						ul.nav.navbar-nav.navbar-right
 							li
 								a(href='/login') Login
+		
+		.container
+			for kind in ['info']
+				if messages[kind]
+					for msg in messages.info
+						.alert.alert-info 
+							button.close(data-dismiss='alert') &times;
+							| #{msg}
 			
 		.container
 			block container

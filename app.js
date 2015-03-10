@@ -19,11 +19,13 @@ var app = express()
 .use(require('morgan')('combined'))
 .use(require('body-parser').urlencoded())
 .use(express.static(__dirname+'/public'))
+.use(require('cookie-parser')())
 .use(require('cookie-session')({
 	keys: (process.env.SECRET || process.env.SECURE_KEY).split(',')
 }))
 .use(passport.initialize())
 .use(passport.session())
+.use(require('express-flash')())
 .use(require('./lib/router'))
 .listen(process.env.PORT, function() {
 	console.log('Listening on '+process.env.PORT)
