@@ -23,6 +23,7 @@
     "morgan": "^1.5.1",
     "passport": "^0.2.1",
     "passport-facebook": "^1.0.3",
+    "passport-twitter": "^1.0.3",
     "underscore": "^1.8.2"
   }
 }

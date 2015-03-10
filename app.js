@@ -39,6 +39,31 @@ passport.deserializeUser(function(id, done) {
 	User.findById(id, done)
 })
 
+passport.use(new (require('passport-twitter').Strategy)({
+	consumerKey: process.env.TWITTER_CONSUMER_KEY,
+    consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
+	callbackURL: process.env.BASE+'/auth/twitter/callback'
+}, function(token, tokenSecret, profile, done) {
+	User.findByTwitterId(profile.id, function(err, user) {
+		if(err) {
+			return done(err)
+		}
+		if(!user) {
+			user = User.createFromTwitter(profile)
+		}
+
+		user.profiles.twitter.token = token
+		user.profiles.twitter.tokenSecret = tokenSecret
+		user.save(function(err) {
+			if(err) {
+				return done(err)
+			}
+
+			done(null, user)
+		})
+	})
+}))
+
 passport.use(new (require('passport-facebook').Strategy)({
 	clientID: process.env.FACEBOOK_APP_ID,
 	clientSecret: process.env.FACEBOOK_APP_SECRET,
