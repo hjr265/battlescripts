@@ -21,6 +21,23 @@ html
 				}
 
 	body
+		.navbar.navbar-default
+			.container
+				.navbar-header
+				
+				.collapse.navbar-collapse
+					if user
+						ul.nav.navbar-nav.navbar-right
+							li
+								a(href='/logout') Logout
+								
+						p.navbar-text.navbar-right #{user.name}
+						
+					else
+						ul.nav.navbar-nav.navbar-right
+							li
+								a(href='/login') Login
+			
 		.container
 			block container
 
