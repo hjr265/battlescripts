@@ -24,9 +24,21 @@ html
 		.navbar.navbar-default
 			.container
 				.navbar-header
+					a.navbar-brand(href='/') Battlescripts
 				
 				.collapse.navbar-collapse
 					if user
+						ul.nav.navbar-nav
+							li
+								a(href='/my-bots') My Bots
+							
+							if user.roles.indexOf('admin') >= 0
+								li
+									a(href='/users') Users
+									
+								li
+									a(href='/contests') Contests
+									
 						ul.nav.navbar-nav.navbar-right
 							li
 								a(href='/logout') Logout
