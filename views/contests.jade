@@ -1,0 +1,15 @@
+extends layout
+
+block container
+	.panel.panel-default
+		.panel-body
+			h2 Contests
+			
+		.panel-body
+			.btn-toolbar
+				.btn-group
+					a.btn.btn-primary(href='/contests/new') New Contest
+				
+		.list-group
+			for contest in contests
+				a.list-group-item(href='/contests/#{contest.id}') #{contest.title}

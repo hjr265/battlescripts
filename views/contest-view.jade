@@ -1,0 +1,17 @@
+extends layout
+
+block container
+	.panel.panel-default
+		.panel-body
+			.pull-right
+				a(href='/contests/#{contest.id}/edit') Edit
+				
+			h2 Contest: #{contest.title}
+			
+		.panel-body
+			p Deadline: #{contest.deadline}
+			a(href='/contests/#{contest.id}/participants') #{partyCount} participant(s)
+
+		.panel-body
+			form(method='post' action='/contests/#{contest.id}/commence')
+				button.btn.btn-primary(type='submit') Commence

@@ -1,0 +1,14 @@
+extends layout
+
+block container
+	.panel.panel-default
+		.panel-body
+			h2 Participants
+				
+		ul.list-group
+			for party in parties
+				li.list-group-item
+					a(href='/bots/#{party.bot.id}') #{party.bot.name}
+					small  &mdash;
+						|  by 
+						a(href='/users/#{party.user.id}') #{party.user.name}

@@ -1,0 +1,15 @@
+extends layout
+
+block container
+	.panel.panel-default
+		.panel-body
+			h2 New Contest
+			
+		.panel-body
+			form(method='post')
+				.form-group
+					input.form-control(name='title' placeholder='Title')
+				.form-group
+					input.form-control(type='date' name='deadline' placeholder='Deadline')
+				
+				button.btn.btn-primary(type='submit') Create
