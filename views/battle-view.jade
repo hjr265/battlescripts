@@ -39,7 +39,7 @@ block container
 													| &nbsp;
 						p.count
 							.pull-right 
-								a(href='/battles/5501a9931d7e491312fef095/participants/0/source') source
+								a(href='/battles/#{battle.id}/participants/#{botNo}/source') source
 							
 							span #{battle.moves.reduce(function(m, v) { return m + (v.botNo === botNo ? 1 : 0) }, 0)}
 							|  move(s)
