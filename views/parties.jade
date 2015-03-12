@@ -5,10 +5,7 @@ block container
 		.panel-body
 			h2 Participants
 				
-		ul.list-group
+		.list-group
 			for party in parties
-				li.list-group-item
-					a(href='/bots/#{party.bot.id}') #{party.bot.name}
-					small  &mdash;
-						|  by 
-						a(href='/users/#{party.user.id}') #{party.user.name}
+				a.list-group-item(href='/participants/#{party.id}') #{party.bot.name}
+					small  &mdash; by #{party.user.name}

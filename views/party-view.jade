@@ -1,0 +1,19 @@
+extends layout
+
+block container
+	.panel.panel-default
+		.panel-body
+			h2 Participants
+				
+			
+		.panel-body
+			h4 Battles
+				
+		.panel-body
+			for round in party.result.rounds
+				h5 Round #{round.no+1}
+				.list-group
+					for battle in round.battles
+						a.list-group-item(href='/battles/#{battle.id}') #{battle.parties[0].bot.name} vs #{battle.parties[1].bot.name}
+				
+			
