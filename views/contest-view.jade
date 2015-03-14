@@ -10,8 +10,21 @@ block container
 			
 		.panel-body
 			p Deadline: #{contest.deadline}
+			p Published: #{contest.published}
 			a(href='/contests/#{contest.id}/participants') #{partyCount} participant(s)
 
 		.panel-body
-			form(method='post' action='/contests/#{contest.id}/commence')
-				button.btn.btn-primary(type='submit') Commence
+			.row
+				.col-xs-6
+					form(method='post' action='/contests/#{contest.id}/commence')
+						button.btn.btn-primary(type='submit') Commence
+						
+				.col-xs-6
+					.pull-right
+						if !contest.published
+							form(method='post' action='/contests/#{contest.id}/publish')
+								button.btn.btn-primary(type='submit') Publish
+						
+						else
+							form(method='post' action='/contests/#{contest.id}/unpublish')
+								button.btn.btn-primary(type='submit') Unpublish
