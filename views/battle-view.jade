@@ -47,10 +47,11 @@ block container
 													| #{cell.pieceNo}
 												else
 													| &nbsp;
-						.count
+						if party.user.id.toString() === user.id.toString()
 							.pull-right 
-								a.btn.btn-default(href='/battles/#{battle.id}/participants/#{botNo}/source') Source
-							
+								button.btn.btn-default.btn-sm(type='button' data-toggle='modal' data-target='#mdlSource-#{botNo}') Source
+						
+						p.count(style='line-height: 30px;')
 							span #{battle.moves.reduce(function(m, v) { return m + (v.okay && v.botNo === botNo ? 1 : 0) }, 0)}
 							|  move(s)
 
@@ -79,6 +80,19 @@ block container
 									
 								when 'turn#attack not-called'
 									|  failed to attack.. battle forfeited
+	
+	for party, botNo in battle.parties
+		if party.user.id.toString() !== user.id.toString()
+			- continue
+			
+		.modal.fade(id='mdlSource-#{botNo}')
+			.modal-dialog.modal-lg
+				.modal-content
+					.modal-header
+						h4.modal-title Source: #{party.bot.name}
+						
+					.modal-body
+						pre.pre-scrollable #{party.bot.code}
 
 block append styles
 	style(type='text/css').
