@@ -11,7 +11,10 @@ block container
 		.panel-body
 			p Deadline: #{contest.deadline}
 			p Published: #{contest.published}
-			a(href='/contests/#{contest.id}/participants') #{partyCount} participant(s)
+			p
+				a(href='/contests/#{contest.id}/participants') #{partyCount} participant(s)
+			p
+				a(href='/contests/#{contest.id}/battles') #{battleCount} battle(s)
 
 		.panel-body
 			.row
