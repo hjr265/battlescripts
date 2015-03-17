@@ -1,0 +1,23 @@
+extends layout
+
+block container
+	h2 #{contest.title}
+	
+	.panel.panel-default
+		.list-group
+			for battle in battles
+				a.list-group-item(href='/battles/#{battle.id}') 
+					span.badge
+						if battle.isWinner(user)
+							i.fa.fa-trophy
+						
+					| Round #{battle.rel.roundNo+1} &mdash; 
+					if battle.parties[0].winner
+						b #{battle.parties[0].bot.name}
+					else
+						| #{battle.parties[0].bot.name}
+					|  vs 
+					if battle.parties[1].winner
+						b #{battle.parties[1].bot.name}
+					else
+						| #{battle.parties[1].bot.name}

@@ -5,7 +5,8 @@ block container
 		if !party.contest.published
 			- continue
 			
-		h2 #{party.contest.title}
+		h2
+			a(href='/contests/#{party.contest.id}/battles') #{party.contest.title}
 		
 		.list-group
 			for round in party.result.rounds
