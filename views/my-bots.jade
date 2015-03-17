@@ -4,9 +4,15 @@ block container
 	if nextContest
 		.alert.alert-warning
 			.pull-right
-				button.btn.btn-primary.btn-xs(type='button' data-toggle='modal' data-target='#mdlParticipate') Participate
-				
-			p Upcoming Contest: #{nextContest.title}
+				if nextParty
+					span(style='margin-right: 24px;') Enrolled with 
+						a(href='/bots/#{nextParty.bot.id}') #{nextParty.bot.name}
+					
+					button.btn.btn-primary.btn-xs(type='button' data-toggle='modal' data-target='#mdlParticipate') Change
+				else
+					button.btn.btn-primary.btn-xs(type='button' data-toggle='modal' data-target='#mdlParticipate') Participate
+					
+			| Upcoming Contest: #{nextContest.title}
 		
 		#mdlParticipate.modal.fade
 			.modal-dialog
@@ -22,11 +28,17 @@ block container
 								select.form-control(name='bot')
 									for bot in bots
 										option(value='#{bot.id}' selected=(nextParty && nextParty.bot.id.toString() === bot.id.toString())) #{bot.name}
-							
-							button.btn.btn-primary(type='submit') Participate
+										
+							if nextParty
+								.pull-right
+									button.btn.btn-default(type='submit' name='_action' value='unenroll') Unenroll
+									
+								button.btn.btn-primary(type='submit') Change
+							else
+								button.btn.btn-primary(type='submit') Participate
 	
 	if bots.length === 0
-		.panel.panel-default
+		.panel.panel-default.panel-spacious
 			.panel-body
 				.row
 					.col-xs-8.col-xs-offset-2.text-center

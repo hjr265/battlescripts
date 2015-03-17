@@ -14,31 +14,10 @@ block container
 						.form-group
 							textarea.form-control(name='code' rows='8' placeholder='Code') #{bot.code}
 						
-						button.btn.btn-default.btn-test(type='button' data-toggle='modal' data-target='#mdlTest') Test
-						
 						.pull-right
 							.btn-group
 								a.btn.btn-default(href='/bots/#{bot.id}') Cancel
 								button.btn.btn-primary(type='submit') Save
-
-	#mdlTest.modal.fade
-		.modal-dialog
-			.modal-content
-				.modal-header
-					button.close(type='button' data-dismiss='modal')
-						span &times;
-					h4.modal-title Test Bot: #{bot.name}
-				
-				.modal-body
-					form(method='post' action='/test-battle')
-						.form-group
-							select.form-control(name='other')
-								for other in bots
-									option(value='#{other.id}') #{other.name}
-						
-						input(type='hidden' name='bot' value='#{bot.id}')
-						
-						button.btn.btn-primary(type='submit') Begin
 
 block append scripts
 	script(type='text/javascript').

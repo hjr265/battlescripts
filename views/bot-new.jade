@@ -12,7 +12,32 @@ block container
 						.form-group
 							input.form-control(name='name' rows='8' placeholder='Name')
 						.form-group
-							textarea.form-control(name='code' rows='8' placeholder='Code')
+							textarea.form-control(name='code' rows='8' placeholder='Code').
+								function Bot() {
+									this.grid = {}
+									for(var y = 0; y < 10; ++y) {
+										for(var x = 0; x < 10; ++x) {
+											grid[x+','+y] = false
+										}
+									}
+								}
+
+								Bot.prototype.play = function(turn) {
+									// turn#attack(x, y) - attacks at (x, y), returns true if it successfully hits the opponent's ship and
+									//                     returns an object {no, kind, size, x, y, direction} when it sinks a ship
+
+									var sqs = []
+									for(var y = 0; y < 10; ++y) {
+										for(var x = 0; x < 10; ++x) {
+											if(!this.grid[x+','+y]) {
+												sqs.push([x, y])
+											}
+										}
+									}
+									var sq = sqs[Math.floor(Math.random()*sqs.length)]
+									turn.attack(sq[0], sq[1])
+									this.grid[sq[0]+','+sq[1]] = true
+								}
 
 						.pull-right
 							.btn-group

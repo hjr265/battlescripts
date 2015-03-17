@@ -1,9 +1,44 @@
 extends layout
 
 block container
+	.row
+		.col-xs-8
+			h2 Bot: #{bot.name}
+			
+		.col-xs-4
+			.btn-toolbar
+				.btn-group.pull-right
+					button.btn.btn-primary(type='button' data-toggle='modal' data-target='#mdlTest') Test
+					
+				.btn-group.pull-right
+					a.btn.btn-default(href='/bots/#{bot.id}/edit')
+						i.fa.fa-pencil
+					a.btn.btn-default(href='#')
+						i.fa.fa-trash
+	br
+	
 	.panel.panel-default
 		.panel-body
-			h2 Bot: #{bot.name}
-				
-		.panel-body
 			pre.pre-scrollable #{bot.code}
+			
+	#mdlTest.modal.fade
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close(type='button' data-dismiss='modal')
+						span &times;
+					h4.modal-title Test Bot: #{bot.name}
+				
+				form(method='post' action='/test-battle')
+					.modal-body
+						p Choose one of your other bots to battle against 
+							b #{bot.name}
+						.form-group
+							select.form-control(name='other')
+								for other in bots
+									option(value='#{other.id}') #{other.name}
+					
+						input(type='hidden' name='bot' value='#{bot.id}')
+					
+					.modal-footer
+						button.btn.btn-primary(type='submit') Begin
