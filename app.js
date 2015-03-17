@@ -27,9 +27,23 @@ var app = express()
 .use(passport.initialize())
 .use(passport.session())
 .use(require('express-flash')())
+.use(function(req, res, next) {
+	req.io = io
+	next()
+})
 .use(require('./lib/router'))
-.listen(process.env.PORT, function() {
+
+var server = require('http').createServer(app)
+server.listen(process.env.PORT, function() {
 	console.log('Listening on '+process.env.PORT)
+})
+
+var io = require('socket.io')(server)
+
+io.sockets.on('connection', function(socket) {
+	socket.on('track contest-run', function(data) {
+		socket.join('contest-run:'+data.id)
+	})
 })
 
 passport.serializeUser(function(user, done) {

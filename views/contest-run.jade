@@ -1,0 +1,34 @@
+extends layout
+
+block container
+	h2 Contest in Progress
+	br
+	
+	.panel.panel-default
+		.panel-body
+			pre#lines.pre-scrollable
+			
+			.pull-right
+				a.btn.btn-primary(href='/contests/#{contest.id}' style='display: none;') Continue
+				
+block append scripts
+	script(src='//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js')
+	script(type='text/javascript') var trackId = !{JSON.stringify(contest.id.toString())}
+	script(type='text/javascript').
+		var socket = io('//')
+		socket.on('connect', function() {
+			setTimeout(function() {
+				socket.emit('track contest-run', {
+					id: trackId
+				})
+			}, 0)
+			
+			socket.on('contest-run:step', function(data) {
+				$('#lines').append($('<div></div>')
+					.text(data.line))
+				$('#lines').scrollTop(Infinity)
+				if(data.kind === 'finish') {
+					$('.btn-primary').show()
+				}
+			})
+		})
