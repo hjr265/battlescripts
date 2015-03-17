@@ -1,27 +1,27 @@
 extends layout
 
 block container
-	.panel.panel-default
-		.panel-body
-			h2 My Battles
+	for party in parties
+		if !party.contest.published
+			- continue
 			
-			for party in parties
-				if !party.contest.published
-					- continue
-					
-				h4 #{party.contest.title}
-				
-				for round in party.result.rounds
-					h5 Round #{round.no+1}
-					.list-group
-						for battle in round.battles
-							a.list-group-item(href='/battles/#{battle.id}') 
-								if battle.parties[0].winner
-									b #{battle.parties[0].bot.name}
-								else
-									| #{battle.parties[0].bot.name}
-								|  vs 
-								if battle.parties[1].winner
-									b #{battle.parties[1].bot.name}
-								else
-									| #{battle.parties[1].bot.name}
+		h2 #{party.contest.title}
+		
+		.list-group
+			for round in party.result.rounds
+				for battle in round.battles
+					a.list-group-item(href='/battles/#{battle.id}') 
+						span.badge
+							if battle.isWinner(user)
+								i.fa.fa-trophy
+							
+						| Round #{round.no+1} &mdash; 
+						if battle.parties[0].winner
+							b #{battle.parties[0].bot.name}
+						else
+							| #{battle.parties[0].bot.name}
+						|  vs 
+						if battle.parties[1].winner
+							b #{battle.parties[1].bot.name}
+						else
+							| #{battle.parties[1].bot.name}

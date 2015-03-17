@@ -34,15 +34,43 @@ block container
 							
 							button.btn.btn-primary(type='submit') Participate
 	
-	.panel.panel-default
-		.panel-body
-			h2 My Bots
-			
-		.panel-body
-			.btn-toolbar
-				.btn-group
-					a.btn.btn-primary(href='/my-bots/new') New Bot
+	if bots.length === 0
+		.panel.panel-default
+			.panel-body
+				.row
+					.col-xs-8.col-xs-offset-2.text-center
+						img(src='/img/bot-happy.png')
+						
+						h3 You haven't added any bot yet
+						p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris pellentesque mattis ultricies. Praesent sapien nisi, vestibulum non porttitor sit amet, maximus id lorem.
+						
+						a.btn.btn-primary(href='/my-bots/new')
+							i.fa.fa-plus
+							|  Add New Bot
+						a.btn.btn-default(href='#') Learn More
+		
+	else
+		.row
+			.col-xs-8
+				h2 My Bots
 				
-		.list-group
-			for bot in bots
-				a.list-group-item(href='/bots/#{bot.id}/edit') #{bot.name}
+			.col-xs-4
+				.btn-toolbar
+					.btn-group.pull-right
+						a.btn.btn-primary(href='/my-bots/new')
+							i.fa.fa-plus
+							|  Add New Bot
+		br
+			
+		.panel.panel-default
+			ul.list-group
+				for bot in bots
+					li.list-group-item
+						.pull-right
+							.btn-group
+								a.btn.btn-default(href='/bots/#{bot.id}/edit')
+									i.fa.fa-pencil
+								a.btn.btn-default(href='#')
+									i.fa.fa-trash
+						h5
+							a(href='/bots/#{bot.id}') #{bot.name}

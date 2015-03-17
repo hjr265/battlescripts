@@ -5,6 +5,7 @@ html
 
 		link(rel='stylesheet' href='//fonts.googleapis.com/css?family=Open+Sans')
 		link(rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.2/css/bootstrap.min.css')
+		link(rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.3.0/css/font-awesome.min.css')
 		block styles
 			style(type='text/css').
 				pre,
@@ -19,39 +20,47 @@ html
 				h2 {
 					margin-top: 0;
 				}
+				header {
+					padding: 24px 0;
+				}
+				header .logo {
+					height: 34px;
+				}
+				header .name {
+					margin-right: 24px;
+				}
 
 	body
-		.navbar.navbar-default
-			.container
-				.navbar-header
-					a.navbar-brand(href='/') Battlescripts
-				
-				.collapse.navbar-collapse
+		header.container
+			.row
+				.col-xs-6
+					img.logo(src='/img/logo-toptal.png')
+					
+				.col-xs-6.text-right
 					if user
-						ul.nav.navbar-nav
-							li
-								a(href='/my-bots') My Bots
-							
-							li
-								a(href='/my-battles') My Battles
-							
-							if user.roles.indexOf('admin') >= 0
-								li
-									a(href='/users') Users
-									
-								li
-									a(href='/contests') Contests
-									
-						ul.nav.navbar-nav.navbar-right
-							li
-								a(href='/logout') Logout
-								
-						p.navbar-text.navbar-right #{user.name}
+						span.name #{user.name}
 						
+						a.btn.btn-default(href='/logout') Logout
+					
 					else
-						ul.nav.navbar-nav.navbar-right
+						a.btn.btn-default(href='/login') Login
+		
+		.navbar.navbar-default(style='margin-bottom: 64px;')
+			.container
+				if user
+					ul.nav.navbar-nav
+						li
+							a(href='/my-bots') My Bots
+						
+						li
+							a(href='/my-battles') My Battles
+						
+						if user.roles.indexOf('admin') >= 0
 							li
-								a(href='/login') Login
+								a(href='/users') Users
+								
+							li
+								a(href='/contests') Contests
 		
 		.container
 			for kind in ['info']

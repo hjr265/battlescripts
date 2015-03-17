@@ -1,15 +1,19 @@
 extends layout
 
 block container
+	h2 New Bot
+	br
+		
 	.panel.panel-default
 		.panel-body
-			h2 New Bot
-			
-		.panel-body
-			form(method='post')
-				.form-group
-					input.form-control(name='name' rows='8' placeholder='Name')
-				.form-group
-					textarea.form-control(name='code' rows='8' placeholder='Code')
-				
-				button.btn.btn-primary(type='submit') Save
+			.row
+				.col-xs-8.col-xs-offset-2
+					form(method='post')
+						.form-group
+							input.form-control(name='name' rows='8' placeholder='Name')
+						.form-group
+							textarea.form-control(name='code' rows='8' placeholder='Code')
+
+						.pull-right
+							a.btn.btn-default(href='/my-bots') Cancel
+							button.btn.btn-primary(type='submit') Save

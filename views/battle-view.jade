@@ -1,25 +1,35 @@
 extends layout
 
 block container
+	.row
+		.col-xs-6
+			h2 Battle Results
+		.col-xs-6
+			.btn-toolbar.pull-right
+				.btn-group
+					button.btn.btn-primary.btn-play Play
+				.btn-group
+					button.btn.btn-primary.btn-stop(style='display: none;') Stop
+				
+				.btn-group
+					button.btn.btn-default.btn-fast.active Fast
+					button.btn.btn-default.btn-slow Slow
+					button.btn.btn-default.btn-slower Slower
+					button.btn.btn-default.btn-step Step
+	br
+	
 	.panel.panel-default
 		.panel-body
 			.row
-				.col-md-6
-					button.btn.btn-primary.btn-play Play
-					button.btn.btn-primary.btn-stop(style='display: none;') Stop
-				.col-md-6.text-right
-					.btn-group
-						button.btn.btn-default.btn-fast.active Fast
-						button.btn.btn-default.btn-slow Slow
-						button.btn.btn-default.btn-slower Slower
-						button.btn.btn-default.btn-step Step
-			br
-
-			.row
 				for party, botNo in battle.parties
 					.col-md-6
-						h3 #{party.bot.name}
-							small  &mdash; by #{party.user.name}
+						if party.winner
+							.pull-right
+								i.fa.fa-trophy.fa-5x
+						h4 #{party.bot.name}
+						p 
+							small by #{party.user.name}
+						br
 						table.table.table-bordered
 							tbody
 								tr
@@ -39,7 +49,7 @@ block container
 													| &nbsp;
 						p.count
 							.pull-right 
-								a(href='/battles/#{battle.id}/participants/#{botNo}/source') source
+								a.btn.btn-default(href='/battles/#{battle.id}/participants/#{botNo}/source') Source
 							
 							span #{battle.moves.reduce(function(m, v) { return m + (v.botNo === botNo ? 1 : 0) }, 0)}
 							|  move(s)
@@ -49,8 +59,8 @@ block container
 			ul.ul-moves
 				p
 					for party in battle.parties
-						if party.winner
-							h4 #{party.bot.name} won!
+							if party.winner
+								h4.alert.alert-warning.text-center #{party.bot.name} won!
 				for move in battle.moves.reverse()
 					li(data-move='#{JSON.stringify(move)}')
 						b #{battle.parties[move.botNo].bot.name}

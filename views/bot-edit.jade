@@ -1,21 +1,24 @@
 extends layout
 
 block container
+	h2 Edit Bot
+	br
+	
 	.panel.panel-default
 		.panel-body
-			h2 Edit Bot: #{bot.name}
-			
-		.panel-body
-			form(method='post')
-				.form-group
-					input.form-control(name='name' rows='8' placeholder='Name' value='#{bot.name}')
-				.form-group
-					textarea.form-control(name='code' rows='8' placeholder='Code') #{bot.code}
-				
-				button.btn.btn-primary(type='submit') Save
-				
-				.pull-right
-					button.btn.btn-default.btn-test(type='button' data-toggle='modal' data-target='#mdlTest') Test
+			.row
+				.col-xs-8.col-xs-offset-2
+					form(method='post')
+						.form-group
+							input.form-control(name='name' rows='8' placeholder='Name' value='#{bot.name}')
+						.form-group
+							textarea.form-control(name='code' rows='8' placeholder='Code') #{bot.code}
+						
+						button.btn.btn-default.btn-test(type='button' data-toggle='modal' data-target='#mdlTest') Test
+						
+						.pull-right
+							a.btn.btn-default(href='/bots/#{bot.id}') Cancel
+							button.btn.btn-primary(type='submit') Save
 
 	#mdlTest.modal.fade
 		.modal-dialog
@@ -34,4 +37,5 @@ block container
 						
 						input(type='hidden' name='bot' value='#{bot.id}')
 						
+				
 						button.btn.btn-primary(type='submit') Begin
