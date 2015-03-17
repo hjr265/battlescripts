@@ -9,7 +9,16 @@ block container
 					
 			h2 User: #{other.name}
 			
+		.panel-body
 			p Last Seen: #{other.lastSeen}
+			
+			if other.profiles.facebook
+				p 
+					a(href='https://www.facebook.com/#{other.profiles.facebook.id}') Facebook
+			
+			if other.profiles.twitter
+				p 
+					a(href='https://www.twitter.com/#{JSON.parse(other.profiles.twitter._raw).screen_name}') Twitter
 						
 		.panel-body
 			h4 Bots
