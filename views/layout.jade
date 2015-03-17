@@ -18,13 +18,14 @@ html
 							img.logo(src='/img/logo-toptal.png')
 						
 					.col-xs-6.text-right
-						if user
-							span.name #{user.name}
+						block user-nav
+							if user
+								span.name #{user.name}
+								
+								a.btn.btn-default(href='/logout') Logout
 							
-							a.btn.btn-default(href='/logout') Logout
-						
-						else
-							a.btn.btn-default(href='/login') Login
+							else
+								a.btn.btn-default(href='/login') Login
 		
 		.navbar.navbar-default(style='margin-bottom: 64px;')
 			.container
