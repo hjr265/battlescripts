@@ -3,8 +3,12 @@ extends layout
 block container
 	.panel.panel-default
 		.panel-body
+			.pull-right
+				form(method='post' action='/users/#{other.id}/pretend')
+					button.btn.btn-primary(type='submit') Pretend
+					
 			h2 User: #{other.name}
-				
+						
 		.panel-body
 			h4 Bots
 		
