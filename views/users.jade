@@ -1,14 +1,17 @@
 extends layout
 
 block container
-	.panel.panel-default
-		.panel-body
+	.row
+		.col-xs-6
+			h2 Users
+			
+		.col-xs-6
 			.pull-right
 				form(method='get' action='/users/search')
-					input.form-control(type='search' name='q')
-						
-			h2 Users
-				
+					input.form-control(type='search' name='q' placeholder='Search')
+	br
+	
+	.panel.panel-default
 		.list-group
 			for user in users
 				a.list-group-item(href='/users/#{user.id}') #{user.name}
