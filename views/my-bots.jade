@@ -2,20 +2,11 @@ extends layout
 
 block container
 	if nextContest
-		.panel.panel-default
-			.panel-body
-				h2 Next Contest: #{nextContest.title}
-		
-			if nextParty
-				.panel-body
-					p Participating with #{nextParty.bot.name}
-						|  (
-						a(href='#' data-toggle='modal' data-target='#mdlParticipate') change
-						| )
-			
-			else
-				.panel-body
-					button.btn.btn-primary(type='button' data-toggle='modal' data-target='#mdlParticipate') Participate
+		.alert.alert-warning
+			.pull-right
+				button.btn.btn-primary.btn-xs(type='button' data-toggle='modal' data-target='#mdlParticipate') Participate
+				
+			p Upcoming Contest: #{nextContest.title}
 		
 		#mdlParticipate.modal.fade
 			.modal-dialog

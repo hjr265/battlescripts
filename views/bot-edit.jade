@@ -4,7 +4,7 @@ block container
 	h2 Edit Bot
 	br
 	
-	.panel.panel-default
+	.panel.panel-default.panel-spacious
 		.panel-body
 			.row
 				.col-xs-8.col-xs-offset-2
@@ -17,8 +17,9 @@ block container
 						button.btn.btn-default.btn-test(type='button' data-toggle='modal' data-target='#mdlTest') Test
 						
 						.pull-right
-							a.btn.btn-default(href='/bots/#{bot.id}') Cancel
-							button.btn.btn-primary(type='submit') Save
+							.btn-group
+								a.btn.btn-default(href='/bots/#{bot.id}') Cancel
+								button.btn.btn-primary(type='submit') Save
 
 	#mdlTest.modal.fade
 		.modal-dialog
@@ -37,5 +38,10 @@ block container
 						
 						input(type='hidden' name='bot' value='#{bot.id}')
 						
-				
 						button.btn.btn-primary(type='submit') Begin
+
+block append scripts
+	script(type='text/javascript').
+		CodeMirror.fromTextArea($('form textarea[name=code]')[0], {
+			lineNumbers: true
+		})

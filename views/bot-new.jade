@@ -4,7 +4,7 @@ block container
 	h2 New Bot
 	br
 		
-	.panel.panel-default
+	.panel.panel-default.panel-spacious
 		.panel-body
 			.row
 				.col-xs-8.col-xs-offset-2
@@ -15,5 +15,12 @@ block container
 							textarea.form-control(name='code' rows='8' placeholder='Code')
 
 						.pull-right
-							a.btn.btn-default(href='/my-bots') Cancel
-							button.btn.btn-primary(type='submit') Save
+							.btn-group
+								a.btn.btn-default(href='/my-bots') Cancel
+								button.btn.btn-primary(type='submit') Save
+							
+block append scripts
+	script(type='text/javascript').
+		CodeMirror.fromTextArea($('form textarea[name=code]')[0], {
+			lineNumbers: true
+		})
