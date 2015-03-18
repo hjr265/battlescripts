@@ -72,7 +72,7 @@ passport.use(new (require('passport-twitter').Strategy)({
 		if(!user) {
 			user = User.createFromTwitter(profile)
 		} else {
-			user.profiles.facebook = profile
+			user.profiles.twitter = profile
 		}
 
 		user.profiles.twitter.token = token
@@ -101,7 +101,7 @@ passport.use(new (require('passport-facebook').Strategy)({
 		if(!user) {
 			user = User.createFromFacebook(profile)
 		} else {
-			user.profiles.twitter = profile
+			user.profiles.facebook = profile
 		}
 
 		user.profiles.facebook.accessToken = accessToken
