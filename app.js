@@ -1,3 +1,4 @@
+var _ = require('underscore')
 var async = require('async')
 var express = require('express')
 var mongoose = require('mongoose')
@@ -32,6 +33,11 @@ var app = express()
 	next()
 })
 .use(require('./lib/router'))
+
+_.extend(app.locals, {
+	_: _,
+	moment: require('moment')
+})
 
 var server = require('http').createServer(app)
 server.listen(process.env.PORT, function() {

@@ -1,29 +1,79 @@
 extends layout
 
 block container
+	.row
+		.col-xs-6
+			h2 User: #{other.name}
+		.col-xs-6
+			.btn-toolbar
+				.btn-group.pull-right
+					button.btn.btn-primary(data-toggle='modal' data-target='#mdlPretend') Pretend
+	br
+	
 	.panel.panel-default
 		.panel-body
-			.pull-right
-				form(method='post' action='/users/#{other.id}/pretend')
-					button.btn.btn-primary(type='submit') Pretend
+			.row
+				.col-md-6
+					h4 Profiles
+					if other.profiles.facebook
+						a.thumbnail.pull-left(href='https://www.facebook.com/#{other.profiles.facebook.id}' target='_blank' style='margin-right: 8px;')
+							img(src='https://graph.facebook.com/v2.2/#{other.profiles.facebook.id}/picture?width=128&height=128' width='128' height='128')
+							.text-center(style='margin-top: 6px;')
+								i.fa.fa-facebook-square.fa-2x
 					
-			h2 User: #{other.name}
-			
+					if other.profiles.twitter
+						a.thumbnail.pull-left(href='https://www.twitter.com/#{JSON.parse(other.profiles.twitter._raw).screen_name}' target='_blank' style='margin-right: 8px;')
+							img(src='#{other.profiles.twitter.photos[0].value.replace(/_normal\./, ".")}' width='128' height='128')
+							.text-center(style='margin-top: 6px;')
+								i.fa.fa-twitter-square.fa-2x
+					
+					if other.profiles.google
+						a.thumbnail.pull-left(href='https://plus.google.com/#{other.profiles.google.id}' target='_blank' style='margin-right: 8px;')
+							img(src='#{other.profiles.google.photos[0].value.replace(/sz=\d+/, "sz=128")}' width='128' height='128')
+							.text-center(style='margin-top: 6px;')
+								i.fa.fa-google-plus-square.fa-2x
+									
+				.col-md-6
+					h4 &nbsp;
+					dl
+						dt Last Seen
+						dd
+							if other.lastSeen
+								span(data-date='#{moment(other.lastSeen).unix()}') #{moment(other.lastSeen).format('lll')}
+							else
+								| Unknown
+						
 		.panel-body
-			p Last Seen: #{other.lastSeen}
-			
-			if other.profiles.facebook
-				p 
-					a(href='https://www.facebook.com/#{other.profiles.facebook.id}') Facebook
-			
-			if other.profiles.twitter
-				p 
-					a(href='https://www.twitter.com/#{JSON.parse(other.profiles.twitter._raw).screen_name}') Twitter
+			h4 Participations
+		
+			.list-group
+				for party in parties
+					a.list-group-item(href='/contests/#{party.contest.id}') #{party.contest.title}
 						
 		.panel-body
 			h4 Bots
 		
-		.list-group
-			for bot in bots
-				a.list-group-item(href='/bots/#{bot.id}') #{bot.name}
+			.list-group
+				for bot in bots
+					a.list-group-item(href='/bots/#{bot.id}') #{bot.name}
 	
+				
+	#mdlPretend.modal.fade
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close(type='button' data-dismiss='modal')
+						span &times;
+					h4.modal-title Pretend as 
+						b #{other.name}
+				
+				form(method='post' action='/users/#{other.id}/pretend')
+					.modal-body
+						p Are you sure you want to login as 
+							b #{other.name}
+					
+					.modal-footer
+						.btn-group.pull-left
+							button.btn.btn-default(data-dismiss='modal') Cancel
+						.btn-group
+							button.btn.btn-primary(type='submit') Pretend
