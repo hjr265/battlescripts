@@ -65,6 +65,8 @@ passport.use(new (require('passport-twitter').Strategy)({
 		}
 		if(!user) {
 			user = User.createFromTwitter(profile)
+		} else {
+			user.profiles.facebook = profile
 		}
 
 		user.profiles.twitter.token = token
@@ -92,6 +94,8 @@ passport.use(new (require('passport-facebook').Strategy)({
 		}
 		if(!user) {
 			user = User.createFromFacebook(profile)
+		} else {
+			user.profiles.twitter = profile
 		}
 
 		user.profiles.facebook.accessToken = accessToken
@@ -102,6 +106,35 @@ passport.use(new (require('passport-facebook').Strategy)({
 			}
 
 			console.log('saved')
+			done(null, user)
+		})
+	})
+}))
+
+passport.use(new (require('passport-google-oauth').OAuth2Strategy)({
+	clientID: process.env.GOOGLE_CLIENT_ID,
+	clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+	callbackURL: process.env.BASE+'/auth/google/callback'
+}, function(accessToken, refreshToken, profile, done) {
+	User.findByEmail(profile.emails.map(function(email) {
+		return email.value
+	}), function(err, user) {
+		if(err) {
+			return done(err)
+		}
+		if(!user) {
+			user = User.createFromGoogle(profile)
+		} else {
+			user.profiles.google = profile
+		}
+
+		user.profiles.google.accessToken = accessToken
+		user.profiles.google.refreshToken = refreshToken
+		user.save(function(err) {
+			if(err) {
+				return done(err)
+			}
+
 			done(null, user)
 		})
 	})
