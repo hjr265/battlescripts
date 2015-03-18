@@ -1,11 +1,13 @@
 extends layout
 
 block container
+	h2 Participants
+	br
+		
 	.panel.panel-default
-		.panel-body
-			h2 Participants
-				
 		.list-group
 			for party in parties
-				a.list-group-item(href='/participants/#{party.id}') #{party.bot.name}
-					small  &mdash; by #{party.user.name}
+				a.list-group-item(href='/participants/#{party.id}')
+					b #{party.bot.name}
+					br
+					small by #{party.user.name}

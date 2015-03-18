@@ -1,15 +1,32 @@
 extends layout
 
 block container
+	h2 Participant: #{party.bot.name}
+		small  by #{party.user.name}
+	br
+	
 	.panel.panel-default
 		.panel-body
-			h2 Participants
-				
-			
+			.row
+				.col-md-6
+					h4 Author
+					a.thumbnail.pull-left(href='/users/#{party.user.id}')
+						img(src='#{party.user.avatarUrl}' width='64' height='64')
+							
+				.col-md-6
+					h4 &nbsp;
+					dl
+						dt Submitted
+						dd
+							span(data-ts='#{moment(party.created).unix()}' data-date-fmt='lll') #{moment(party.created).format('lll')}
+		
+		.panel-body
+			h4 Source
+			pre.pre-scrollable #{party.bot.code}
+		
 		.panel-body
 			h4 Battles
 				
-		.panel-body
 			for round in party.result.rounds
 				h5 Round #{round.no+1}
 				.list-group

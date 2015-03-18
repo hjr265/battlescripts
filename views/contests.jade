@@ -1,15 +1,19 @@
 extends layout
 
 block container
-	.panel.panel-default
-		.panel-body
+	.row
+		.col-xs-6
 			h2 Contests
-			
-		.panel-body
+		
+		.col-xs-6
 			.btn-toolbar
-				.btn-group
-					a.btn.btn-primary(href='/contests/new') New Contest
-				
+				.btn-group.pull-right
+					a.btn.btn-primary(href='/contests/new') 
+						i.fa.fa-plus
+						|  Add New Contest
+	br
+		
+	.panel.panel-default
 		.list-group
 			for contest in contests
 				a.list-group-item(href='/contests/#{contest.id}') #{contest.title}

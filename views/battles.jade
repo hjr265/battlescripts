@@ -1,7 +1,16 @@
 extends layout
 
 block container
-	h2 #{contest.title}
+	.row
+		.col-xs-6
+			h2 #{contest.title}
+			
+		.col-xs-6
+			.btn-toolbar
+				if user.isAdmin
+					.btn-group.pull-right
+						button.btn.btn-primary(data-toggle='modal' data-target='#mdlCommence' disabled=(contest.published)) Commence
+	br
 	
 	.panel.panel-default
 		.list-group
@@ -21,3 +30,24 @@ block container
 						b #{battle.parties[1].bot.name}
 					else
 						| #{battle.parties[1].bot.name}
+
+						
+	#mdlCommence.modal.fade
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close(type='button' data-dismiss='modal')
+						span &times;
+					h4.modal-title Commence Battles
+
+				form(method='post' action='/contests/#{contest.id}/commence')
+					.modal-body
+						p Are you sure you want to commence battles for 
+							b #{contest.title}
+							| ?
+					
+					.modal-footer
+						.btn-group.pull-left
+							button.btn.btn-default(data-dismiss='modal') Cancel
+						.btn-group
+							button.btn.btn-primary(type='submit') Commence

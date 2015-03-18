@@ -14,10 +14,10 @@ block container
 						.form-group
 							textarea.form-control(name='code' rows='8' placeholder='Code') #{bot.code}
 						
-						.pull-right
-							.btn-group
-								a.btn.btn-default(href='/bots/#{bot.id}') Cancel
-								button.btn.btn-primary(type='submit') Save
+						.btn-group.pull-right
+							button.btn.btn-primary(type='submit') Save
+						.btn-group
+							a.btn.btn-default(href='/bots/#{bot.id}') Cancel
 
 block append scripts
 	script(type='text/javascript').

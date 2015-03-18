@@ -1,33 +1,88 @@
 extends layout
 
 block container
-	.panel.panel-default
-		.panel-body
-			.pull-right
-				a(href='/contests/#{contest.id}/edit') Edit
-				
+	.row
+		.col-xs-6
 			h2 Contest: #{contest.title}
 			
-		.panel-body
-			p Deadline: #{contest.deadline}
-			p Published: #{contest.published}
-			p
-				a(href='/contests/#{contest.id}/participants') #{partyCount} participant(s)
-			p
-				a(href='/contests/#{contest.id}/battles') #{battleCount} battle(s)
-
+		.col-xs-6
+			.btn-toolbar
+				.btn-group.pull-right
+					if !contest.published
+						button.btn.btn-primary(data-toggle='modal' data-target='#mdlPublish') Publish
+					else
+						button.btn.btn-primary(data-toggle='modal' data-target='#mdlPublish') Unpublish
+					
+				.btn-group.pull-right
+					a.btn.btn-default(href='/contests/#{contest.id}/edit')
+						i.fa.fa-pencil
+	br
+	
+	.panel.panel-default
 		.panel-body
 			.row
-				.col-xs-6
-					form(method='post' action='/contests/#{contest.id}/commence')
-						button.btn.btn-primary(type='submit') Commence
+				.col-md-6
+					.row
+						.col-xs-3
+							a.btn.btn-default.btn-block(href='/contests/#{contest.id}/participants')
+								.h3 #{partyCount}
+								| Participants
+					
+						.col-xs-3
+							a.btn.btn-default.btn-block(href='/contests/#{contest.id}/battles')
+								.h3 #{battleCount}
+								| Battles
+								
+				.col-md-6
+					dl
+						dt Deadline
+						dd
+							span(data-ts='#{moment(contest.deadline).unix()}' data-date-fmt='lll') #{moment(contest.deadline).format('lll')}
+					
+					dl
+						dt Published
+						dd
+							if contest.published
+								span(data-ts='#{moment(contest.published).unix()}') Yes
+									small  &ndash; 
+										span(data-ts='#{moment(contest.published).unix()}' data-date-fmt='lll') #{moment(contest.published).format('lll')}
+							
+							else
+								| No
+				
+	#mdlPublish.modal.fade
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close(type='button' data-dismiss='modal')
+						span &times;
+					if !contest.published
+						h4.modal-title Publish Results
+					else
+						h4.modal-title Unpublish Results
+				
+				if !contest.published
+					form(method='post' action='/contests/#{contest.id}/publish')
+						.modal-body
+							p Are you sure you want to publish results for 
+								b #{contest.title}
+								| ?
 						
-				.col-xs-6
-					.pull-right
-						if !contest.published
-							form(method='post' action='/contests/#{contest.id}/publish')
+						.modal-footer
+							.btn-group.pull-left
+								button.btn.btn-default(data-dismiss='modal') Cancel
+							.btn-group
 								button.btn.btn-primary(type='submit') Publish
+				
+				else
+					form(method='post' action='/contests/#{contest.id}/unpublish')
+						.modal-body
+							p Are you sure you want to unpublish results for 
+								b #{contest.title}
+								| ?
 						
-						else
-							form(method='post' action='/contests/#{contest.id}/unpublish')
+						.modal-footer
+							.btn-group.pull-left
+								button.btn.btn-default(data-dismiss='modal') Cancel
+							.btn-group
 								button.btn.btn-primary(type='submit') Unpublish

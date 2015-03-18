@@ -39,10 +39,10 @@ block container
 									this.grid[sq[0]+','+sq[1]] = true
 								}
 
-						.pull-right
-							.btn-group
-								a.btn.btn-default(href='/my-bots') Cancel
-								button.btn.btn-primary(type='submit') Save
+						.btn-group.pull-right
+							button.btn.btn-primary(type='submit') Save
+						.btn-group
+							a.btn.btn-default(href='/my-bots') Cancel
 							
 block append scripts
 	script(type='text/javascript').

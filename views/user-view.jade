@@ -39,7 +39,7 @@ block container
 						dt Last Seen
 						dd
 							if other.lastSeen
-								span(data-date='#{moment(other.lastSeen).unix()}') #{moment(other.lastSeen).format('lll')}
+								span(data-ts='#{moment(other.lastSeen).unix()}' data-date-fmt='lll') #{moment(other.lastSeen).format('lll')}
 							else
 								| Unknown
 						
