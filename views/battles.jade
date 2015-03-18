@@ -9,7 +9,7 @@ block container
 			.btn-toolbar
 				if user.isAdmin
 					.btn-group.pull-right
-						button.btn.btn-primary(data-toggle='modal' data-target='#mdlCommence' disabled=(contest.published)) Commence
+						button.btn.btn-primary(data-toggle='modal' data-target='#mdlCommence' disabled=(!!contest.published)) Commence
 	br
 	
 	.panel.panel-default

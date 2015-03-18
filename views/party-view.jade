@@ -1,8 +1,20 @@
 extends layout
 
 block container
-	h2 Participant: #{party.bot.name}
-		small  by #{party.user.name}
+	.row
+		.col-xs-6
+			h2 Participant: #{party.bot.name}
+				small  by #{party.user.name}
+		
+		.col-xs-6
+			.btn-toolbar
+				.btn-group.pull-right
+					button.btn.btn-danger(data-toggle='modal' data-target='#mdlReject') Reject
+				.btn-group.pull-right
+					if party.approved
+						button.btn.btn-default(data-toggle='modal' data-target='#mdlUnapprove') Unapprove
+					else
+						button.btn.btn-primary(data-toggle='modal' data-target='#mdlApprove') Approve
 	br
 	
 	.panel.panel-default
@@ -19,6 +31,17 @@ block container
 						dt Submitted
 						dd
 							span(data-ts='#{moment(party.created).unix()}' data-date-fmt='lll') #{moment(party.created).format('lll')}
+					
+					dl
+						dt Approved
+						dd
+							if party.approved
+								span(data-ts='#{moment(party.approved).unix()}') Yes
+									small  &ndash; 
+										span(data-ts='#{moment(party.approved).unix()}' data-date-fmt='lll') #{moment(party.approved).format('lll')}
+							
+							else
+								| No
 		
 		.panel-body
 			h4 Source
@@ -41,5 +64,63 @@ block container
 								b #{battle.parties[1].bot.name}
 							else
 								| #{battle.parties[1].bot.name}
-				
 			
+	#mdlApprove.modal.fade
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close(type='button' data-dismiss='modal')
+						span &times;
+					h4.modal-title Approve Participant
+				
+				form(method='post' action='/participants/#{party.id}/approve')
+					.modal-body
+						p Are you sure you want to approve 
+							b #{party.bot.name}
+							|  for this contest?
+					
+					.modal-footer
+						.btn-group.pull-left
+							button.btn.btn-default(data-dismiss='modal') Cancel
+						.btn-group
+							button.btn.btn-primary(type='submit') Approve
+			
+	#mdlUnapprove.modal.fade
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close(type='button' data-dismiss='modal')
+						span &times;
+					h4.modal-title Unapprove Participant
+				
+				form(method='post' action='/participants/#{party.id}/unapprove')
+					.modal-body
+						p Are you sure you want to unapprove 
+							b #{party.bot.name}
+							|  for this contest?
+					
+					.modal-footer
+						.btn-group.pull-left
+							button.btn.btn-default(data-dismiss='modal') Cancel
+						.btn-group
+							button.btn.btn-primary(type='submit') Unapprove
+							
+	#mdlReject.modal.fade
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close(type='button' data-dismiss='modal')
+						span &times;
+					h4.modal-title Reject Participant
+				
+				form(method='post' action='/participants/#{party.id}/reject')
+					.modal-body
+						p Are you sure you want to approve 
+							b #{party.bot.name}
+							|  for this contest?
+					
+					.modal-footer
+						.btn-group.pull-left
+							button.btn.btn-default(data-dismiss='modal') Cancel
+						.btn-group
+							button.btn.btn-danger(type='submit') Reject
