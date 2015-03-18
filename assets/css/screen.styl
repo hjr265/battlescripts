@@ -81,6 +81,30 @@ header
 			box-shadow none
 			color rgba(255,255,255,0.9)
 
+	&.btn-danger
+		border 1px solid #ac2125
+		text-shadow 0 1px rgba(0,0,0,0.36)
+		background #d95a4f
+		background -webkit-gradient(linear, left top, left bottom, from(#eb745d), color-stop(6%, #de5042), color-stop(50%, #d95a4f), color-stop(90%, #d1483a), to(#cb3f33))
+		background -webkit-linear-gradient(#eb745d 5%, #de5042 6%, #d95a4f 50%, #d1483a 90%, #cb3f33 95%)
+		background linear-gradient(#eb745d 5%,#de5042 6%,#d95a4f 50%,#d1483a 90%,#cb3f33 95%)
+		color #fff
+
+		&:hover
+			border-color #cd7576
+			background #dd9e9f
+			background -webkit-gradient(linear, left top, left bottom, from(#efc1c0), color-stop(6%, #e6a8a9), color-stop(90%, #dd9e9f), to(#d89293))
+			background -webkit-linear-gradient(#efc1c0 5%, #e6a8a9 6%, #dd9e9f 90%, #d89293 95%)
+			background linear-gradient(#efc1c0 5%,#e6a8a9 6%,#dd9e9f 90%,#d89293 95%)
+
+		&:active
+		&.active
+			border-color #9a282a
+			background #af1810
+			background -webkit-gradient(linear, left top, left bottom, from(#830909), color-stop(10%, #af1810), to(#af1810))
+			background -webkit-linear-gradient(#830909 0%, #af1810 10%, #af1810 100%)
+			background linear-gradient(#830909 0%,#af1810 10%,#af1810 100%)
+
 .panel.panel-spacious
 	.panel-body
 		padding-top 96px

@@ -73,7 +73,32 @@ block container
 							.btn-group
 								a.btn.btn-default(href='/bots/#{bot.id}/edit')
 									i.fa.fa-pencil
-								a.btn.btn-default(href='#')
+								a.btn.btn-default.btn-delete(href='#' data-toggle='modal' data-target='#mdlDelete' data-bot-id='#{bot.id}' data-bot-name='#{bot.name}')
 									i.fa.fa-trash
 						h5
 							a(href='/bots/#{bot.id}') #{bot.name}
+		
+		#mdlDelete.modal.fade
+			.modal-dialog
+				.modal-content
+					.modal-header
+						button.close(type='button' data-dismiss='modal')
+							span &times;
+						h4.modal-title Confirm Delete
+					
+					form(method='post' action='')
+						.modal-body
+							p Are you sure you want to delete your bot 
+								b.bot-name
+								| ?
+						.modal-footer
+							.btn-group
+								button.btn.btn-default(data-dismiss='modal') Cancel
+								button.btn.btn-danger(type='submit') Delete
+
+block append scripts
+	script(type='text/javascript').
+		$('.btn-delete').on('click', function() {
+			$('#mdlDelete form').attr('action', '/bots/'+$(this).data('bot-id')+'/delete')
+			$('#mdlDelete .bot-name').text($(this).data('bot-name'))
+		})
