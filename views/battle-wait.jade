@@ -1,0 +1,47 @@
+extends layout
+
+block container
+	h2 Battle
+	br
+
+	.panel.panel-default.panel-spacious
+		.panel-body.text-center
+			h4 Waiting for battle to begin..
+			
+block append scripts
+	script(src='//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js')
+	script(type='text/javascript') var trackId = !{JSON.stringify(trackId)}
+	script(type='text/javascript').
+		var socket = io('//')
+		socket.on('connect', function() {
+			setTimeout(function() {
+				socket.emit('track test-battle', {
+					id: trackId
+				})
+			}, 0)
+			
+			socket.on('test-battle:step', function(data) {
+				switch(data.kind) {
+					case 'begin':
+						$('h4').text('Battle in progress')
+						break
+							
+					case 'finish':
+						$('h4').text('Battle has ended')
+						location.href = data.next
+						break
+				}
+			})
+		})
+		
+		function poll() {
+			$.getJSON('/test-battle?trackId='+trackId, function(data) {
+				if(!data || !data.next) {
+					return setTimeout(poll, 2000)
+				}
+				
+				$('h4').text('Battle has ended')
+				location.href = data.next
+			})
+		}
+		poll()

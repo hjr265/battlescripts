@@ -50,6 +50,9 @@ io.sockets.on('connection', function(socket) {
 	socket.on('track contest-run', function(data) {
 		socket.join('contest-run:'+data.id)
 	})
+	socket.on('track test-battle', function(data) {
+		socket.join('test-battle:'+data.id)
+	})
 })
 
 passport.serializeUser(function(user, done) {
