@@ -9,13 +9,15 @@ block container
 			.row
 				for party, i in challenge.parties
 					.col-xs-5.text-center
-						span.thumbnail(style='display: inline-block;')
-							img(src='#{party.user.avatarUrl}' width='128' height='128')
-						p #{party.user.name}
+						if party.bot
+							.h3 #{party.bot.name}
+						else 
+							.h3.text-muted ?
+						p by #{party.user.name}
 						
 					if i === 0
 						.col-xs-2.text-center
-							.h2(style='line-height: 96px;') vs
+							.h2(style='padding-top: 4px;') vs
 			br
 			br
 			hr
