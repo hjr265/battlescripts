@@ -1,0 +1,21 @@
+extends layout
+
+block container
+	.row
+		.col-xs-6
+			h2 My Challenges
+				
+		.col-xs-6
+			.btn-toolbar
+				.btn-group.pull-right
+					a.btn.btn-primary(href='/my-challenges/new')
+						i.fa.fa-plus
+						|  New Challange
+	br
+		
+	.panel.panel-default
+		.list-group
+			for challenge in challenges
+				a.list-group-item(href='/challenges/#{challenge.id}') 
+					span(data-ts='#{moment(challenge.created).unix()}' data-date-fmt='lll') #{moment(challenge.created).format('lll')}
+					|  &mdash; #{challenge.opponentOf(user).user.name}

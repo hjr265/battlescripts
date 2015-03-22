@@ -1,0 +1,23 @@
+extends layout
+
+block container
+	h2 New Challenge
+	br
+		
+	.panel.panel-default.panel-spacious
+		.panel-body
+			.row
+				.col-xs-8.col-xs-offset-2
+					form(method='post')
+						.form-group
+							select.form-control(name='bot')
+								for bot in bots
+									option(value='#{bot.id}') #{bot.name}
+						.form-group
+							input.form-control(name='opponent' placeholder='Opponent')
+
+						.btn-group.pull-right
+							button.btn.btn-primary(type='submit') Create
+						.btn-group
+							a.btn.btn-default(href='/my-bots') Cancel
+							

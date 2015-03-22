@@ -10,17 +10,17 @@ block container
 			
 block append scripts
 	script(src='//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.5/socket.io.min.js')
-	script(type='text/javascript') var trackId = !{JSON.stringify(trackId)}
+	script(type='text/javascript') var battleId = !{JSON.stringify(battle.id)}
 	script(type='text/javascript').
 		var socket = io('//')
 		socket.on('connect', function() {
 			setTimeout(function() {
-				socket.emit('track test-battle', {
-					id: trackId
+				socket.emit('track battle-run', {
+					id: battleId
 				})
 			}, 0)
 			
-			socket.on('test-battle:step', function(data) {
+			socket.on('battle-run:step', function(data) {
 				switch(data.kind) {
 					case 'begin':
 						$('h4').text('Battle in progress')
@@ -28,20 +28,20 @@ block append scripts
 							
 					case 'finish':
 						$('h4').text('Battle has ended')
-						location.href = data.next
+						location.reload()
 						break
 				}
 			})
 		})
 		
 		function poll() {
-			$.getJSON('/test-battle?trackId='+trackId, function(data) {
-				if(!data || !data.next) {
-					return setTimeout(poll, 2000)
+			$.getJSON('/battles/'+battleId+'/ended.json', function(ended) {
+				if(!ended) {
+					return setTimeout(poll, 750)
 				}
 				
 				$('h4').text('Battle has ended')
-				location.href = data.next
+				location.reload()
 			})
 		}
 		poll()

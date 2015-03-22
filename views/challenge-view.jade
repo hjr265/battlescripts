@@ -1,0 +1,53 @@
+extends layout
+
+block container
+	h2 New Challenge
+	br
+		
+	.panel.panel-default.panel-spacious
+		.panel-body
+			.row
+				for party, i in challenge.parties
+					.col-xs-5.text-center
+						span.thumbnail(style='display: inline-block;')
+							img(src='#{party.user.avatarUrl}' width='128' height='128')
+						p #{party.user.name}
+						
+					if i === 0
+						.col-xs-2.text-center
+							.h2(style='line-height: 96px;') vs
+			br
+			br
+			hr
+			br
+			br
+			br
+			.text-center
+				case true
+					when !!challenge.battle
+						a.btn.btn-primary.btn-lg(href='/battles/#{challenge.battle.id.toString()}') See Battle Results
+					
+					when user.id.toString() === challenge.parties[0].user.id.toString()
+						button.btn.btn-default.btn-lg(disabled) Waiting for Opponent's Response
+					
+					when user.id.toString() === challenge.parties[1].user.id.toString()
+						button.btn.btn-primary.btn-lg(data-toggle='modal' data-target='#mdlRespond') Respond to Challenge
+	
+	if !challenge.battle && user.id.toString() === challenge.parties[1].user.id.toString()
+		#mdlRespond.modal.fade
+			.modal-dialog
+				.modal-content
+					.modal-header
+						button.close(type='button' data-dismiss='modal')
+							span &times;
+						h4.modal-title Respond to Challenge
+					
+					form(method='post' action='/challenges/#{challenge.id}/respond')
+						.modal-body
+							.form-group
+								select.form-control(name='bot')
+									for bot in bots
+										option(value='#{bot.id}') #{bot.name}
+								
+						.modal-footer
+								button.btn.btn-primary(type='submit') Respond
