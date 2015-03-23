@@ -15,7 +15,15 @@ block container
 		
 	.panel.panel-default
 		.list-group
-			for challenge in challenges
+			for challenge in newChallenges
 				a.list-group-item(href='/challenges/#{challenge.id}') 
 					span(data-ts='#{moment(challenge.created).unix()}' data-date-fmt='lll') #{moment(challenge.created).format('lll')}
 					|  &mdash; #{challenge.opponentOf(user).user.name}
+					
+	.panel.panel-default
+		.list-group
+			for challenge in challenges
+				a.list-group-item(href='/challenges/#{challenge.id}') 
+					.text-muted
+						span(data-ts='#{moment(challenge.created).unix()}' data-date-fmt='lll') #{moment(challenge.created).format('lll')}
+						|  &mdash; #{challenge.opponentOf(user).user.name}
