@@ -48,13 +48,12 @@ html
 							li
 								a(href='/contests') Contests
 		
-		.container
-			for kind in ['info']
-				if messages[kind]
-					for msg in messages.info
-						.alert.alert-info 
-							button.close(data-dismiss='alert') &times;
-							| #{msg}
+		.container(style='position: absolute; top: 48px; left: 25%; width: 50%; text-align: center;')
+			for kind in ['info', 'warning']
+				for msg in messages[kind] || []
+					.alert(class='alert-#{kind}')
+						button.close(data-dismiss='alert') &times;
+						| #{msg}
 			
 		.container
 			block container
