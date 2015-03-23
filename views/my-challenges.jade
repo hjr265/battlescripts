@@ -13,12 +13,13 @@ block container
 						|  New Challange
 	br
 		
-	.panel.panel-default
-		.list-group
-			for challenge in newChallenges
-				a.list-group-item(href='/challenges/#{challenge.id}') 
-					span(data-ts='#{moment(challenge.created).unix()}' data-date-fmt='lll') #{moment(challenge.created).format('lll')}
-					|  &mdash; #{challenge.opponentOf(user).user.name}
+	if newChallenges && newChallenges.length > 0
+		.panel.panel-default
+			.list-group
+				for challenge in newChallenges
+					a.list-group-item(href='/challenges/#{challenge.id}') 
+						span(data-ts='#{moment(challenge.created).unix()}' data-date-fmt='lll') #{moment(challenge.created).format('lll')}
+						|  &mdash; #{challenge.opponentOf(user).user.name}
 					
 	.panel.panel-default
 		.list-group
