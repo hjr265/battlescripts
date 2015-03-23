@@ -32,15 +32,16 @@ html
 				if user
 					ul.nav.navbar-nav
 						li
-							a(href='/my-bots') My Bots
+							a(href='/my-bots') Bots
 						
 						li
-							a(href='/my-challenges') My Challenges
+							a(href='/my-challenges') Challenges
 						
 						li
-							a(href='/my-battles') My Battles
+							a(href='/my-battles') Battles
 						
-						if user.roles.indexOf('admin') >= 0
+					if user.isAdmin
+						ul.nav.navbar-nav(style='margin-left: 32px;')
 							li
 								a(href='/users') Users
 								
