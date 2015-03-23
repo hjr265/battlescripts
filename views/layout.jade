@@ -64,3 +64,8 @@ html
 			script(src='//cdnjs.cloudflare.com/ajax/libs/codemirror/5.0.0/codemirror.min.js')
 			script(type='text/javascript').
 				$('a[href="'+location.pathname.replace(/\/search$/, '')+'"]').parent('li').addClass('active')
+				$('form[method=post]').on('submit', function() {
+					$('button[type=submit]', this)
+					.addClass('disabled')
+					.attr('disabled', true)
+				})
