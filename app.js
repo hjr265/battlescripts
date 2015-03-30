@@ -95,6 +95,12 @@ passport.use(new (require('passport-facebook').Strategy)({
 	clientSecret: process.env.FACEBOOK_APP_SECRET,
 	callbackURL: process.env.BASE+'/auth/facebook/callback'
 }, function(accessToken, refreshToken, profile, done) {
+	if(!profile.emails || profile.emails.length === 0) {
+		return done(null, false, {
+			msg: 'An email address is required'
+		})
+	}
+
 	User.findByEmail(profile.emails.map(function(email) {
 		return email.value
 	}), function(err, user) {
@@ -125,6 +131,12 @@ passport.use(new (require('passport-google-oauth').OAuth2Strategy)({
 	clientSecret: process.env.GOOGLE_CLIENT_SECRET,
 	callbackURL: process.env.BASE+'/auth/google/callback'
 }, function(accessToken, refreshToken, profile, done) {
+	if(!profile.emails || profile.emails.length === 0) {
+		return done(null, false, {
+			msg: 'An email address is required'
+		})
+	}
+
 	User.findByEmail(profile.emails.map(function(email) {
 		return email.value
 	}), function(err, user) {
