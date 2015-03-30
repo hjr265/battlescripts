@@ -14,29 +14,57 @@ block container
 						.form-group
 							textarea.form-control(name='code' rows='8' placeholder='Code').
 								function Bot() {
-									this.grid = {}
+									this.grid = []
 									for(var y = 0; y < 10; ++y) {
+										var row = []
 										for(var x = 0; x < 10; ++x) {
-											this.grid[x+','+y] = false
+											row.push({
+												attacked: false,
+												success: false
+											})
 										}
+										this.grid.push(row)
 									}
+
+									this.pieces = []
 								}
 
 								Bot.prototype.play = function(turn) {
-									// turn#attack(x, y) - attacks at (x, y), returns true if it successfully hits the opponent's ship and
+									// turn.attack(x, y) - attacks at (x, y), returns true if it successfully hits the opponent's ship and
 									//                     returns an object {no, kind, size, x, y, direction} when it sinks a ship
 
-									var sqs = []
+									var squares = []
 									for(var y = 0; y < 10; ++y) {
 										for(var x = 0; x < 10; ++x) {
-											if(!this.grid[x+','+y]) {
-												sqs.push([x, y])
+											if(!this.grid[y][x].attacked) {
+												squares.push([x, y])
 											}
 										}
 									}
-									var sq = sqs[Math.floor(Math.random()*sqs.length)]
-									turn.attack(sq[0], sq[1])
-									this.grid[sq[0]+','+sq[1]] = true
+									var sq = squares[Math.floor(Math.random()*squares.length)]
+									var piece = turn.attack(sq[0], sq[1])
+									this.grid[sq[1]][sq[0]].attacked = true
+
+									if(piece) {
+										this.grid[sq[1]][sq[0]].success = true
+
+										if(typeof piece === 'object') {
+											// As a piece is sunk, turn.attack returns an object:
+											// {
+											//   "no": 0,        // Piece number
+											//   "kind": ""      // .. kind: 'carrier', 'warship', 'submarine', 'cruiser' or 'patrol'
+											//   "size": 0       // .. size: [1,5]
+											//   "x": 0          // .. x coordinate: [0,10)
+											//   "y": 0          // .. y coordinate: [0,10)
+											//   "direction": "" // .. direction: 'h' or 'w'
+											// }
+
+											this.pieces.push({
+												no: piece.no,
+												kind: piece.kind
+											})
+										}
+									}
 								}
 
 						.btn-group.pull-right
