@@ -48,15 +48,13 @@ block container
 										}
 									}
 									var sq = squares[Math.floor(Math.random()*squares.length)]
-									var success = turn.attack(sq[0], sq[1])
+									var piece = turn.attack(sq[0], sq[1])
 									this.grid[sq[1]][sq[0]].attacked = true
 
-									if(success) {
+									if(piece) {
 										this.grid[sq[1]][sq[0]].success = true
 
-										if(typeof success === 'object') {
-											var piece = success.piece
-
+										if(typeof piece === 'object') {
 											// As a piece is sunk, turn.attack returns an object:
 											// {
 											//   "no": 0,        // Piece number
@@ -108,14 +106,12 @@ block container
 
 					pre.
 						{
-							"piece": {
-								"no": 0,        // Piece number
-								"kind": ""      // .. kind: 'carrier', 'warship', 'submarine', 'cruiser' or 'patrol'
-								"size": 0       // .. size: [1,5]
-								"x": 0          // .. x coordinate: [0,10)
-								"y": 0          // .. y coordinate: [0,10)
-								"direction": "" // .. direction: 'h' or 'w'
-							}
+							"no": 0,        // Piece number
+							"kind": ""      // .. kind: 'carrier', 'warship', 'submarine', 'cruiser' or 'patrol'
+							"size": 0       // .. size: [1,5]
+							"x": 0          // .. x coordinate: [0,10)
+							"y": 0          // .. y coordinate: [0,10)
+							"direction": "" // .. direction: 'h' or 'w'
 						}
 							
 block append scripts
