@@ -46,12 +46,15 @@ block container
 						img(src='/img/bot-happy.png')
 						
 						h3 You haven't added any bot yet
-						p Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris pellentesque mattis ultricies. Praesent sapien nisi, vestibulum non porttitor sit amet, maximus id lorem.
+						p Write bots. Challenge friends. Destroy ships
+							small  (virtually).
+						br
 						
-						a.btn.btn-primary(href='/my-bots/new')
+						a.btn.btn-primary(href='/my-bots/new' data-toggle='tooltip' data-placement='bottom' title='Create a new bot')
 							i.fa.fa-plus
 							|  Add New Bot
-						a.btn.btn-default(href='#') Learn More
+						span(style='display: inline-block; height: 1px; width: 8px;')
+						a.btn.btn-default(href='/help') Learn More
 		
 	else
 		.row
@@ -61,7 +64,7 @@ block container
 			.col-xs-4
 				.btn-toolbar
 					.btn-group.pull-right
-						a.btn.btn-primary(href='/my-bots/new')
+						a.btn.btn-primary(href='/my-bots/new' data-toggle='tooltip' data-placement='bottom' title='Create a new bot' data-container='body')
 							i.fa.fa-plus
 							|  Add New Bot
 		br
@@ -72,12 +75,12 @@ block container
 					li.list-group-item
 						.btn-toolbar.pull-right
 							.btn-group
-								a.btn.btn-default(href='/bots/#{bot.id}/edit')
+								a.btn.btn-default(href='/bots/#{bot.id}/edit' data-toggle='tooltip' data-placement='bottom' title='Edit this bot' data-container='body')
 									i.fa.fa-pencil
 								a.btn.btn-default.btn-delete(href='#' data-toggle='modal' data-target='#mdlDelete' data-bot-id='#{bot.id}' data-bot-name='#{bot.name}')
 									i.fa.fa-trash
 							.btn-group
-								a.btn.btn-primary(href='/bots/#{bot.id}#test') Test
+								a.btn.btn-primary(href='/bots/#{bot.id}#test' data-toggle='tooltip' data-placement='bottom' title='Test this bot against one of your own bots' data-container='body') Test
 						h5
 							a(href='/bots/#{bot.id}') #{bot.name}
 		

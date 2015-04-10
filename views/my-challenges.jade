@@ -7,10 +7,11 @@ block container
 				
 		.col-xs-6
 			.btn-toolbar
-				.btn-group.pull-right
-					a.btn.btn-primary(href='/my-challenges/new')
-						i.fa.fa-plus
-						|  New Challange
+				if newChallenges && newChallenges.length > 0
+					.btn-group.pull-right
+						a.btn.btn-primary(href='/my-challenges/new')
+							i.fa.fa-plus
+							|  New Challange
 	br
 		
 	if newChallenges && newChallenges.length > 0
@@ -20,11 +21,25 @@ block container
 					a.list-group-item(href='/challenges/#{challenge.id}') 
 						span(data-ts='#{moment(challenge.created).unix()}' data-date-fmt='lll') #{moment(challenge.created).format('lll')}
 						|  &mdash; #{challenge.opponentOf(user).user.name}
-					
-	.panel.panel-default
-		.list-group
-			for challenge in challenges
-				a.list-group-item(href='/challenges/#{challenge.id}') 
-					.text-muted
-						span(data-ts='#{moment(challenge.created).unix()}' data-date-fmt='lll') #{moment(challenge.created).format('lll')}
-						|  &mdash; #{challenge.opponentOf(user).user.name}
+
+	else
+		.panel.panel-default
+			.panel-body.text-center
+				h3 Looks like you don't have any new challenge
+				p Challenge a friend, show 'em who's the boss.
+				br
+
+				a.btn.btn-primary(href='/my-challenges/new')
+					i.fa.fa-plus
+					|  New Challange
+				br
+				br
+	
+	if challenges && challenges.length > 0
+		.panel.panel-default
+			.list-group
+				for challenge in challenges
+					a.list-group-item(href='/challenges/#{challenge.id}') 
+						.text-muted
+							span(data-ts='#{moment(challenge.created).unix()}' data-date-fmt='lll') #{moment(challenge.created).format('lll')}
+							|  &mdash; #{challenge.opponentOf(user).user.name}

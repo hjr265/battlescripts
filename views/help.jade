@@ -1,0 +1,52 @@
+extends layout
+
+block container
+	.panel.panel-default.panel-spacious
+		.panel-body
+			.row
+				.col-xs-8.col-xs-offset-2
+					h2 BattleScripts
+					p You can create a bot by navigating to the 
+						a(href='/my-bots/new') bot create page
+						| . Every time you try to create a new bot, you will be given a sample implementation of a bot that plays the game in a completely random manner.
+
+					p To define a bot, you simply create a JavaScript object constructor function, and add a single method to its prototype:
+					pre.
+						function Bot() {}
+						Bot.prototype.play = function(turn) {}
+
+					p The battle simulator will call the method "play" everytime it is your turn to make a move against your opponent. The method will be invoked with a single argument "turn". You must handle the call to this method synchornously, as failing to attack during your turn will be treated as immediate defeat. You attack during your turn by calling the "turn.attack" method with the x and y coordinates:
+					pre.
+						turn.attack(x, y)
+
+					p Be careful about causing any exception, taking too long to make a move during your turn, or calling attack multiple times. As the battle simulator will treat them as failures and as a result mark your bot as defeated.
+
+					p Since you may not call attack multiple times, every time you successfully hit a boat, let that invocation of "play" end. The battle simulator will shortly reinvoke your "play" method for your consecutive turn. Every time you successfully hit a boat, the attach method will return true. If however, the boat has been sunk completely, it will return an object describing the boat you just sunk from your opponent's grid:
+
+					pre.
+						{
+							"piece": {
+								"no": 0,        // Piece number
+								"kind": ""      // .. kind: 'carrier', 'warship', 'submarine', 'cruiser' or 'patrol'
+								"size": 0       // .. size: [1,5]
+								"x": 0          // .. x coordinate: [0,10)
+								"y": 0          // .. y coordinate: [0,10)
+								"direction": "" // .. direction: 'h' or 'w'
+							}
+						}
+					br
+
+					h4 Testing Bots
+					p To test your bot, you can make the bot fight against itself, or you can create an additional bot and make them fight against each other. You can test a bot by clicking on the "Test" button next to the bot's name from your list and then selecting an opponent bot. Testing your bots against the given sample bot a few times is often a good way to check for issues or potential errors in your implementation.
+					br
+
+					h4 Challenging Friends
+					p You can challenge a friend by navigating to your 
+						a(href='/my-challenges') challenge list
+						|  page and creating a new challenge by clicking on the "+ New Challenge" button. All you need to do is pick a bot, and type your friend's Twitter handle (e.g. "@example") or email address (e.g. "someone@example.com"). Once that is done, wait for your friend to respond to your challenge.
+					br
+
+					h4 Responding to Challenges
+					p Incomng challenges are listed in your 
+						a(href='/my-challenges') challenge list
+						|  page. To respond to a challenge, click on one of them, and then click on the "Respond to Challenge" button. You can then pick a bot from your arsenal and submit it. Responding to a challenge will immediately cause the battle to be simulated. Results should be available shortly after that.

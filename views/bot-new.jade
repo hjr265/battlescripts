@@ -8,10 +8,16 @@ block container
 		.panel-body
 			.row
 				.col-xs-8.col-xs-offset-2
+					p
+						i Create a bot by giving it a name, and defining a JavaScript object constructor with a method "play". 
+							a(href='#' data-toggle='modal' data-target='#mdlNewBotHelp') Click here
+							|  to learn more.
+					br
+
 					form(method='post')
 						.form-group
-							input.form-control(name='name' rows='8' placeholder='Name')
-						.form-group
+							input.form-control(name='name' rows='8' placeholder='Name' data-toggle='tooltip' data-placement='right' title='Make your bot feel special, give it a name' data-container='body')
+						.form-group(data-toggle='tooltip' data-placement='right' title='Define a JavaScript object constructor "Bot", and add the method "play" to its prototype. You can learn more by clicking on "Help" at the right of the navbar' data-container='body')
 							textarea.form-control(name='code' rows='8' placeholder='Code').
 								function Bot() {
 									this.grid = []
@@ -42,13 +48,15 @@ block container
 										}
 									}
 									var sq = squares[Math.floor(Math.random()*squares.length)]
-									var piece = turn.attack(sq[0], sq[1])
+									var success = turn.attack(sq[0], sq[1])
 									this.grid[sq[1]][sq[0]].attacked = true
 
-									if(piece) {
+									if(success) {
 										this.grid[sq[1]][sq[0]].success = true
 
-										if(typeof piece === 'object') {
+										if(typeof success === 'object') {
+											var piece = success.piece
+
 											// As a piece is sunk, turn.attack returns an object:
 											// {
 											//   "no": 0,        // Piece number
@@ -68,9 +76,47 @@ block container
 								}
 
 						.btn-group.pull-right
-							button.btn.btn-primary(type='submit') Save
+							button.btn.btn-primary(type='submit' data-toggle='tooltip' data-placement='left' title='Sanity check the code and save as new bot' data-container='body') Save
 						.btn-group
 							a.btn.btn-default(href='/my-bots') Cancel
+
+	#mdlNewBotHelp.modal.fade
+		.modal-dialog
+			.modal-content
+				.modal-header
+					button.close(type='button' data-dismiss='modal')
+						span &times;
+					h4.modal-title New Bot Help
+				
+				.modal-body
+					p You can create a bot by navigating to the 
+						a(href='/my-bots/new') bot create page
+						| . Every time you try to create a new bot, you will be given a sample implementation of a bot that plays the game in a completely random manner.
+
+					p To define a bot, you simply create a JavaScript object constructor function, and add a single method to its prototype:
+					pre.
+						function Bot() {}
+						Bot.prototype.play = function(turn) {}
+
+					p The battle simulator will call the method "play" everytime it is your turn to make a move against your opponent. The method will be invoked with a single argument "turn". You must handle the call to this method synchornously, as failing to attack during your turn will be treated as immediate defeat. You attack during your turn by calling the "turn.attack" method with the x and y coordinates:
+					pre.
+						turn.attack(x, y)
+
+					p Be careful about causing any exception, taking too long to make a move during your turn, or calling attack multiple times. As the battle simulator will treat them as failures and as a result mark your bot as defeated.
+
+					p Since you may not call attack multiple times, every time you successfully hit a boat, let that invocation of "play" end. The battle simulator will shortly reinvoke your "play" method for your consecutive turn. Every time you successfully hit a boat, the attach method will return true. If however, the boat has been sunk completely, it will return an object describing the boat you just sunk from your opponent's grid:
+
+					pre.
+						{
+							"piece": {
+								"no": 0,        // Piece number
+								"kind": ""      // .. kind: 'carrier', 'warship', 'submarine', 'cruiser' or 'patrol'
+								"size": 0       // .. size: [1,5]
+								"x": 0          // .. x coordinate: [0,10)
+								"y": 0          // .. y coordinate: [0,10)
+								"direction": "" // .. direction: 'h' or 'w'
+							}
+						}
 							
 block append scripts
 	script(type='text/javascript').

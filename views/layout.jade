@@ -47,6 +47,10 @@ html
 								
 							li
 								a(href='/contests') Contests
+
+				ul.nav.navbar-nav.navbar-right
+					li
+						a(href='/help') Help
 		
 		.container(style='position: absolute; top: 48px; left: 25%; width: 50%; text-align: center;')
 			for kind in ['info', 'warning']
@@ -68,4 +72,7 @@ html
 					$('button[type=submit]', this)
 					.addClass('disabled')
 					.attr('disabled', true)
+				})
+				$(function () {
+					$('[data-toggle="tooltip"]').tooltip()
 				})

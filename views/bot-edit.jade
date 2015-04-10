@@ -11,11 +11,11 @@ block container
 					form(method='post')
 						.form-group
 							input.form-control(name='name' rows='8' placeholder='Name' value='#{bot.name}')
-						.form-group
+						.form-group(data-toggle='tooltip' data-placement='right' title='Define a JavaScript object constructor "Bot", and add the method "play" to its prototype. You can learn more by clicking on "Help" at the right of the navbar' data-container='body')
 							textarea.form-control(name='code' rows='8' placeholder='Code') #{bot.code}
 						
 						.btn-group.pull-right
-							button.btn.btn-primary(type='submit') Save
+							button.btn.btn-primary(type='submit' data-toggle='tooltip' data-placement='left' title='Sanity check the code and update this bot' data-container='body') Save
 						.btn-group
 							a.btn.btn-default(href='/bots/#{bot.id}') Cancel
 
