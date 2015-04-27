@@ -57,29 +57,34 @@ block container
 
 		hr
 		.panel-body
-			ul.ul-moves
-				p
-					for party in battle.parties
-							if party.winner
-								h4.alert.alert-warning.text-center #{party.bot.name} won!
-				for move in battle.moves.reverse()
-					li(data-move='#{JSON.stringify(move)}')
-						b #{battle.parties[move.botNo].bot.name}
-						if move.okay
-							|  attacked #{'ABCDEFGHIJ'[move.data.y]}#{move.data.x+1}
-							|  &mdash;
-							if move.data.baam
-								|  and hit a <b>#{battle.parties[(move.botNo+1)%2].pieces[battle.parties[(move.botNo+1)%2].grid[move.data.y][move.data.x].pieceNo].kind}</b>!
+			p
+				for party in battle.parties
+						if party.winner
+							h4.alert.alert-warning.text-center #{party.bot.name} won!
+			div(style='max-height: 192px; overflow-y: auto;')
+				ul.ul-moves(style='padding: 2px; list-style: none;')
+					for move in battle.moves.reverse()
+						li(data-move='#{JSON.stringify(move)}')
+							b #{battle.parties[move.botNo].bot.name}
+							if move.okay
+								|  attacked #{'ABCDEFGHIJ'[move.data.y]}#{move.data.x+1}
+								|  &mdash;
+								if move.data.baam
+									|  and hit a <b>#{battle.parties[(move.botNo+1)%2].pieces[battle.parties[(move.botNo+1)%2].grid[move.data.y][move.data.x].pieceNo].kind}</b>!
+								else
+									|  and missed..
+
 							else
-								|  and missed..
+								case move.fail
+									when 'turn#attack erred'
+										|  erred.. battle forfeited
 
-						else
-							case move.fail
-								when 'turn#attack erred'
-									|  erred.. battle forfeited
-
-								when 'turn#attack not-called'
-									|  failed to attack.. battle forfeited
+									when 'turn#attack not-called'
+										|  failed to attack.. battle forfeited
+			br
+			br
+			p.text-right
+				a(href='/battles/#{battle.id}.json') Export as JSON
 
 	for party, botNo in battle.parties
 		if party.user.id.toString() !== user.id.toString()
