@@ -27,3 +27,12 @@ block container
 							button.btn.btn-primary(type='submit') Create
 						.btn-group
 							a.btn.btn-default(href='/my-bots') Cancel
+
+block append scripts
+	script(type='text/javascript').
+		(function() {
+			var m = location.hash.match(/bot=(\w+)/)
+			if(m) {
+				$('select[name=bot]').val(m[1])
+			}
+		})()
