@@ -8,16 +8,24 @@ block container
 					.col-xs-5.text-center
 						if party.bot
 							.h3 #{party.bot.name}
-						else 
+						else
 							.h3.text-muted ?
 						p by #{party.user.name}
-						
+
 					if i === 0
 						.col-xs-2.text-center
 							.h2(style='padding-top: 4px;') vs
 			br
 			br
 			hr
+			if user.id.toString() === challenge.parties[1].user.id.toString()
+				br
+				br
+				.row
+					.col-xs-8.col-xs-offset-2
+						blockquote
+							p #{challenge.message}
+							footer #{challenge.parties[0].user.name}
 			br
 			br
 			br
@@ -25,13 +33,13 @@ block container
 				case true
 					when !!challenge.battle
 						a.btn.btn-primary.btn-lg(href='/battles/#{challenge.battle.id.toString()}') See Battle Results
-					
+
 					when user.id.toString() === challenge.parties[0].user.id.toString()
 						button.btn.btn-default.btn-lg(disabled) Waiting for Opponent's Response
-					
+
 					when user.id.toString() === challenge.parties[1].user.id.toString()
 						button.btn.btn-primary.btn-lg(data-toggle='modal' data-target='#mdlRespond') Respond to Challenge
-	
+
 	if !challenge.battle && user.id.toString() === challenge.parties[1].user.id.toString()
 		#mdlRespond.modal.fade
 			.modal-dialog
@@ -40,13 +48,13 @@ block container
 						button.close(type='button' data-dismiss='modal')
 							span &times;
 						h4.modal-title Respond to Challenge
-					
+
 					form(method='post' action='/challenges/#{challenge.id}/respond')
 						.modal-body
 							.form-group
 								select.form-control(name='bot')
 									for bot in bots
 										option(value='#{bot.id}') #{bot.name}
-								
+
 						.modal-footer
 								button.btn.btn-primary(type='submit') Respond

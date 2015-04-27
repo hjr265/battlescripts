@@ -3,7 +3,7 @@ extends layout
 block container
 	h2 New Challenge
 	br
-		
+
 	.panel.panel-default.panel-spacious
 		.panel-body
 			.row
@@ -20,8 +20,10 @@ block container
 						.form-group
 							input.form-control(name='opponent' placeholder='Opponent' data-toggle='tooltip' data-placement='right' title='Challenge a friend by typing their Twitter handle (e.g. @example) or email address (e.g. someone@example.com) here' data-container='body')
 
+						.form-group
+							textarea.form-control(name='message' placeholder='Message' maxlength='256' data-toggle='tooltip' data-placement='right' title='Let your friend know who eats metal for breakfast' data-container='body')
+
 						.btn-group.pull-right
 							button.btn.btn-primary(type='submit') Create
 						.btn-group
 							a.btn.btn-default(href='/my-bots') Cancel
-							
