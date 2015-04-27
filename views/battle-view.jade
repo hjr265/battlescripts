@@ -7,17 +7,17 @@ block container
 		.col-xs-6
 			.btn-toolbar.pull-right
 				.btn-group
-					button.btn.btn-primary.btn-play Play
+					button.btn.btn-primary.btn-play Re-play
 				.btn-group
-					button.btn.btn-primary.btn-stop(style='display: none;') Stop
-				
+					button.btn.btn-primary.btn-stop(style='display: none;') Pause
+
 				.btn-group
 					button.btn.btn-default.btn-fast.active Fast
 					button.btn.btn-default.btn-slow Slow
 					button.btn.btn-default.btn-slower Slower
 					button.btn.btn-default.btn-step Step
 	br
-	
+
 	.panel.panel-default
 		.panel-body
 			.row
@@ -27,7 +27,7 @@ block container
 							.pull-right
 								i.fa.fa-trophy.fa-5x
 						h4 #{party.bot.name}
-						p 
+						p
 							small by #{party.user.name}
 						br
 						table.table.table-bordered
@@ -48,9 +48,9 @@ block container
 												else
 													| &nbsp;
 						if party.user.id.toString() === user.id.toString()
-							.pull-right 
+							.pull-right
 								button.btn.btn-default.btn-sm(type='button' data-toggle='modal' data-target='#mdlSource-#{botNo}') Source
-						
+
 						p.count(style='line-height: 30px;')
 							span #{battle.moves.reduce(function(m, v) { return m + (v.okay && v.botNo === botNo ? 1 : 0) }, 0)}
 							|  move(s)
@@ -72,25 +72,25 @@ block container
 								|  and hit a <b>#{battle.parties[(move.botNo+1)%2].pieces[battle.parties[(move.botNo+1)%2].grid[move.data.y][move.data.x].pieceNo].kind}</b>!
 							else
 								|  and missed..
-						
+
 						else
 							case move.fail
 								when 'turn#attack erred'
 									|  erred.. battle forfeited
-									
+
 								when 'turn#attack not-called'
 									|  failed to attack.. battle forfeited
-	
+
 	for party, botNo in battle.parties
 		if party.user.id.toString() !== user.id.toString()
 			- continue
-			
+
 		.modal.fade(id='mdlSource-#{botNo}')
 			.modal-dialog.modal-lg
 				.modal-content
 					.modal-header
 						h4.modal-title Source: #{party.bot.name}
-						
+
 					.modal-body
 						pre.pre-scrollable #{party.bot.code}
 
@@ -172,7 +172,7 @@ block append scripts
 
 			function stop() {
 				$('.btn-stop').hide()
-				$('.btn-play').show()
+				$('.btn-play').text(i === 0 ? 'Re-play' : 'Resume').show()
 
 				clearTimeout(playTimer)
 			}
@@ -190,7 +190,7 @@ block append scripts
 				if($('.btn-step').hasClass('active')) {
 					$('.btn-play').text('Next')
 				} else {
-					$('.btn-play').text('Play')
+					$('.btn-play').text('Re-play')
 				}
 			})
 		})()
