@@ -42,6 +42,10 @@ switch(process.argv[2]) {
 				.populate('battle')
 				.stream()
 				.on('data', function(challenge) {
+					if(!challenge.battle) {
+						return
+					}
+
 					this.pause()
 
 					challenge.parties.forEach(function(party, i) {
