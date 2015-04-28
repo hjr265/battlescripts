@@ -1,0 +1,15 @@
+extends layout
+
+block container
+	if bots.length === 0
+		.panel.panel-default
+			.panel-body.text-center
+				h3 Challenge your friends. Earn glory.
+
+	else
+		.list-group
+			for bot in bots
+				.list-group-item
+					.pull-right Score: #{Math.floor(bot.score)}, Wins: #{bot.stats.wins}
+					| #{bot.name}
+					small  &mdash; #{bot.author.name}

@@ -1,3 +1,4 @@
+var async = require('async')
 var mongoose = require('mongoose')
 
 mongoose.connect(process.env.MONGO_URL || process.env.MONGOLAB_URI, function(err) {
@@ -8,6 +9,81 @@ mongoose.connect(process.env.MONGO_URL || process.env.MONGOLAB_URI, function(err
 })
 
 switch(process.argv[2]) {
+	case 'leaderboard:refresh':
+		var Battle = require('./lib/battle')
+		var Bot = require('./lib/bot')
+		var Challenge = require('./lib/challenge')
+
+		async.series([
+			function(done) {
+				Bot.find()
+				.stream()
+				.on('data', function(bot) {
+					this.pause()
+
+					bot.score = 1450
+					bot.stats.wins = 0
+					bot.save(function(err) {
+						if(err) {
+							return done(err)
+						}
+
+						this.resume()
+					}.bind(this))
+				})
+				.on('end', function() {
+					done()
+				})
+			},
+
+			function(done) {
+				Challenge.find()
+				.populate('parties.bot')
+				.populate('battle')
+				.stream()
+				.on('data', function(challenge) {
+					this.pause()
+
+					challenge.parties.forEach(function(party, i) {
+						party.bot.stats.wins += challenge.battle.parties[i].winner ? 1 : 0
+
+						if(!challenge.battle.parties[i].winner) {
+							return
+						}
+
+						var score = 16 * (1 - (1 / (Math.pow(10, (-(party.bot.score - challenge.parties[1-i].bot.score) / 400) + 1))))
+						if(challenge.parties[1-i].bot.score - score < 1015) {
+							score = challenge.parties[1-i].bot.score - 1015
+						}
+						party.bot.score += score
+						challenge.parties[1-i].bot.score -= score
+					})
+
+					async.each(challenge.parties, function(party, done) {
+						party.bot.save(done)
+					}, function(err) {
+						if(err) {
+							return done(err)
+						}
+
+						this.resume()
+					}.bind(this))
+				})
+				.on('end', function() {
+					done()
+				})
+			}
+
+		], function(err) {
+			if(err) {
+				console.log(err)
+				return process.exit(1)
+			}
+
+			process.exit(0)
+		})
+		break
+
 	case 'users:add-role':
 		var User = require('./lib/user')
 

@@ -81,7 +81,9 @@ block container
 									i.fa.fa-trash
 							.btn-group
 								a.btn.btn-primary(href='/bots/#{bot.id}#test' data-toggle='tooltip' data-placement='bottom' title='Test this bot against one of your own bots' data-container='body') Test
-								a.btn.btn-primary(href='/my-challenges/new#bot=#{bot.id}' data-toggle='tooltip' data-placement='bottom' title='Challenge a friend with this bot' data-container='body') Challenge
+								a.btn.btn-primary(href='/my-challenges/new#bot=#{bot.id}' data-toggle='tooltip' data-placement='bottom' title='Challenge a friend with this bot' data-container='body') Challenge								
+						.pull-right(style='margin-right: 24px;')
+							h5.text-muted Score: #{Math.round(bot.score)}, Wins: #{bot.stats.wins}
 						h5
 							a(href='/bots/#{bot.id}') #{bot.name}
 		
