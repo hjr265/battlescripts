@@ -35,4 +35,8 @@ block append scripts
 			if(m) {
 				$('select[name=bot]').val(m[1])
 			}
+			var m = location.hash.match(/opponent=([@\.\w]+)/)
+			if(m) {
+				$('input[name=opponent]').val(m[1])
+			}
 		})()

@@ -6,10 +6,17 @@ block container
 			h2 Battle Results
 		.col-xs-6
 			.btn-toolbar.pull-right
+				if battle.parties[0].user.id.toString() !== battle.parties[1].user.id.toString()
+					for party, botNo in battle.parties
+						if party.user.id.toString() === user.id.toString()
+							.btn-group
+								a.btn.btn-primary(href='/my-challenges/new#bot=#{party.bot.id}&opponent=#{battle.parties[1-botNo].user.handle}') Re-challenge
+					.btn-group &nbsp;&nbsp;
+					
 				.btn-group
-					button.btn.btn-primary.btn-play Re-play
+					button.btn.btn-default.btn-play Re-play
 				.btn-group
-					button.btn.btn-primary.btn-stop(style='display: none;') Pause
+					button.btn.btn-default.btn-stop(style='display: none;') Pause
 
 				.btn-group
 					button.btn.btn-default.btn-fast.active Fast
