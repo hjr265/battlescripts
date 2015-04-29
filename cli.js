@@ -91,9 +91,9 @@ switch(process.argv[2]) {
 	case 'users:add-role':
 		var User = require('./lib/user')
 
-		var email = process.argv[3]
+		var handle = process.argv[3]
 		var roleName = process.argv[4]
-		User.findByEmail(email, function(err, user) {
+		User.findByHandle(handle, function(err, user) {
 			if(err) {
 				console.log(err)
 				return process.exit(1)
