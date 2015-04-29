@@ -16,52 +16,55 @@ html
 					.col-xs-6
 						a(href='/')
 							img.logo(src='/img/logo-toptal.png')
-						
+
 					.col-xs-6.text-right
 						block user-nav
 							if user
 								span.name #{user.name}
-								
+
 								a.btn.btn-default(href='/logout') Logout
-							
+
 							else
 								a.btn.btn-default(href='/login') Login
-		
+
 		.navbar.navbar-default(style='margin-bottom: 64px;')
 			.container
 				if user
 					ul.nav.navbar-nav
 						li
 							a(href='/my-bots') Bots
-						
+
 						li
-							a(href='/my-challenges') Challenges
-						
+							a(href='/my-challenges')
+								if newChallengeCount > 0
+									.badge.pull-right(style='margin-left: 8px;') #{newChallengeCount}
+								| Challenges
+
 						li
 							a(href='/my-battles') Battles
-						
+
 						li
 							a(href='/leaderboard') Leaderboard
-						
+
 					if user.isAdmin
 						ul.nav.navbar-nav(style='margin-left: 32px;')
 							li
 								a(href='/users') Users
-								
+
 							li
 								a(href='/contests') Contests
 
 				ul.nav.navbar-nav.navbar-right
 					li
 						a(href='/help') Help
-		
+
 		.container(style='position: absolute; top: 48px; left: 25%; width: 50%; text-align: center;')
 			for kind in ['info', 'warning']
 				for msg in messages[kind] || []
 					.alert(class='alert-#{kind}')
 						button.close(data-dismiss='alert') &times;
 						| #{msg}
-			
+
 		.container
 			block container
 
@@ -70,7 +73,7 @@ html
 			.container
 				.row
 					.col-xs-12
-						p Battlescripts brought to you by 
+						p Battlescripts brought to you by
 							a(href='http://www.toptal.com/') Toptal
 							|  for funsies.
 
