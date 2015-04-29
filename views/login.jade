@@ -2,15 +2,29 @@ extends layout
 
 block container
 	.row
-		.col-xs-4.col-xs-offset-4
-			h1 Hello, stranger!
-			p Login using one of your profiles:
-			ul
-				li 
-					a(href='/auth/twitter') Twitter
-				li 
-					a(href='/auth/facebook') Facebook
-				li 
-					a(href='/auth/google') Google
+		.col-md-6.hidden-xs.hidden-sm
+			img.img-thumbnail(src='/img/screen00.jpg')
+			br
+			br
+			
+		.col-md-6.text-center
+			br
+			br
+			br
+			br
+			h1 Challenge Friends. Earn Glory.
+			h4 Login with one of your social accounts to make a bot right now!
+			br
+			br
+			a.btn.btn-link(href='/auth/twitter')
+				i.fa.fa-twitter.fa-4x
+			a.btn.btn-link(href='/auth/facebook')
+				i.fa.fa-facebook.fa-4x
+			a.btn.btn-link(href='/auth/google')
+				i.fa.fa-google.fa-4x
+			br
+			br
+			br
+			br
 
 block user-nav
