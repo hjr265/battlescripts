@@ -30,13 +30,14 @@ block container
 			.row
 				for party, botNo in battle.parties
 					.col-md-6
-						if party.winner
-							.pull-right
-								i.fa.fa-trophy.fa-5x
-						h4 #{party.bot.name}
-						p
-							small by #{party.user.name}
-						br
+						.alert(class='#{party.winner ? (party.user.id.toString() === user.id.toString() ? "alert-success" : "alert-danger") : ""}')
+							if party.winner
+								.pull-right
+									i.fa.fa-trophy.fa-5x
+							h4 #{party.bot.name}
+							p
+								small by #{party.user.name}
+
 						table.table.table-bordered
 							tbody
 								tr
@@ -65,10 +66,6 @@ block container
 
 		hr
 		.panel-body
-			p
-				for party in battle.parties
-						if party.winner
-							h4.alert.alert-warning.text-center #{party.bot.name} won!
 			div(style='max-height: 192px; overflow-y: auto;')
 				ul.ul-moves(style='padding: 2px; list-style: none;')
 					for move in battle.moves.reverse()
