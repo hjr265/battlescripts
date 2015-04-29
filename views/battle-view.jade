@@ -66,30 +66,44 @@ block container
 
 		hr
 		.panel-body
-			div(style='max-height: 192px; overflow-y: auto;')
-				ul.ul-moves(style='padding: 2px; list-style: none;')
-					for move in battle.moves.reverse()
-						li(data-move='#{JSON.stringify(move)}')
-							b #{battle.parties[move.botNo].bot.name}
-							if move.okay
-								|  attacked #{'ABCDEFGHIJ'[move.data.y]}#{move.data.x+1}
-								|  &mdash;
-								if move.data.baam
-									|  and hit a <b>#{battle.parties[(move.botNo+1)%2].pieces[battle.parties[(move.botNo+1)%2].grid[move.data.y][move.data.x].pieceNo].kind}</b>!
-								else
-									|  and missed..
+			.row
+				.col-xs-6
+					div(style='max-height: 192px; overflow-y: auto;')
+						ul.ul-moves(style='padding: 2px; list-style: none;')
+							for move in battle.moves.reverse()
+								li(data-move='#{JSON.stringify(move)}')
+									b #{battle.parties[move.botNo].bot.name}
+									if move.okay
+										|  attacked #{'ABCDEFGHIJ'[move.data.y]}#{move.data.x+1}
+										|  &mdash;
+										if move.data.baam
+											|  and hit a <b>#{battle.parties[(move.botNo+1)%2].pieces[battle.parties[(move.botNo+1)%2].grid[move.data.y][move.data.x].pieceNo].kind}</b>!
+										else
+											|  and missed..
 
-							else
-								case move.fail
-									when 'turn#attack erred'
-										|  erred.. battle forfeited
+									else
+										case move.fail
+											when 'turn#attack erred'
+												|  erred.. battle forfeited
 
-									when 'turn#attack not-called'
-										|  failed to attack.. battle forfeited
-			br
-			br
-			p.text-right
-				a(href='/battles/#{battle.id}.json') Export as JSON
+											when 'turn#attack not-called'
+												|  failed to attack.. battle forfeited
+					br
+					br
+					p.text-right
+						a(href='/battles/#{battle.id}.json') Export as JSON
+				
+				.col-xs-6
+					if battle.parties[0].user.id.toString() !== battle.parties[1].user.id.toString()
+						for party, botNo in battle.parties
+							if party.user.id.toString() === user.id.toString()
+								if otherBots && otherBots.length > 0
+									h4 Other bots you may want to challenge
+									ul
+										for otherBot in otherBots
+											li #{otherBot.name} 
+												small  by&#032;
+													a(href='/my-challenges/new#bot=#{party.bot.id}&opponent=#{otherBot.author.handle}') #{otherBot.author.name}
 
 	for party, botNo in battle.parties
 		if party.user.id.toString() !== user.id.toString()
