@@ -74,7 +74,7 @@ block container
 								li(data-move='#{JSON.stringify(move)}')
 									b #{battle.parties[move.botNo].bot.name}
 									if move.okay
-										|  attacked #{'ABCDEFGHIJ'[move.data.y]}#{move.data.x+1}
+										|  attacked #{'ABCDEFGHIJ'[move.data.x]}#{move.data.y+1}
 										|  &mdash;
 										if move.data.baam
 											|  and hit a <b>#{battle.parties[(move.botNo+1)%2].pieces[battle.parties[(move.botNo+1)%2].grid[move.data.y][move.data.x].pieceNo].kind}</b>!
