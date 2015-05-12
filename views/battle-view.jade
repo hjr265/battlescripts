@@ -196,7 +196,7 @@ block append scripts
 
 			function stop() {
 				$('.btn-stop').hide()
-				$('.btn-play').text(i === 0 ? 'Re-play' : 'Resume').show()
+				$('.btn-play').text(i === 0 ? 'Re-play' : ($('.btn-step').hasClass('active') ? 'Next' : 'Resume')).show()
 
 				clearTimeout(playTimer)
 			}
