@@ -35,15 +35,26 @@ block append scripts
 		})
 		
 		function poll() {
-			$.getJSON('/battles/'+battleId+'/ended.json', function(ended) {
-				if(ended !== true) {
+			$.ajax({
+				dataType: 'json',
+				url: '/battles/'+battleId+'/ended.json',
+				cache: true,
+				success: function(ended) {
+					console.log('!')
+					if(!ended) {
+						return setTimeout(function() {
+							poll()
+						}, 750)
+					}
+					
+					$('h4').text('Battle has ended')
+					location.reload()
+				},
+				error: function() {
 					return setTimeout(function() {
 						poll()
 					}, 750)
-				}
-				
-				$('h4').text('Battle has ended')
-				location.reload()
+				}	
 			})
 		}
 		poll()
