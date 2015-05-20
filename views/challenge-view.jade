@@ -10,7 +10,7 @@ block container
 							.h3 #{party.bot.name}
 						else
 							.h3.text-muted ?
-						p by #{party.user.name}
+						p by #{party.user ? party.user.name : party.stub.name}
 
 					if i === 0
 						.col-xs-2.text-center
@@ -18,7 +18,7 @@ block container
 			br
 			br
 			hr
-			if user.id.toString() === challenge.parties[1].user.id.toString()
+			if challenge.parties[1].user && user.id.toString() === challenge.parties[1].user.id.toString()
 				br
 				br
 				.row
@@ -37,10 +37,10 @@ block container
 					when user.id.toString() === challenge.parties[0].user.id.toString()
 						button.btn.btn-default.btn-lg(disabled) Waiting for Opponent's Response
 
-					when user.id.toString() === challenge.parties[1].user.id.toString()
+					when challenge.parties[1].user && user.id.toString() === challenge.parties[1].user.id.toString()
 						button.btn.btn-primary.btn-lg(data-toggle='modal' data-target='#mdlRespond') Respond to Challenge
 
-	if !challenge.battle && user.id.toString() === challenge.parties[1].user.id.toString()
+	if !challenge.battle && challenge.parties[1].user && user.id.toString() === challenge.parties[1].user.id.toString()
 		#mdlRespond.modal.fade
 			.modal-dialog
 				.modal-content
@@ -48,13 +48,21 @@ block container
 						button.close(type='button' data-dismiss='modal')
 							span &times;
 						h4.modal-title Respond to Challenge
-
-					form(method='post' action='/challenges/#{challenge.id}/respond')
+					
+					if bots.length === 0
 						.modal-body
-							.form-group
-								select.form-control(name='bot')
-									for bot in bots
-										option(value='#{bot.id}') #{bot.name}
-
+							p Looks like you have not created a bot yet.
+							
 						.modal-footer
-								button.btn.btn-primary(type='submit') Respond
+							a.btn.btn-primary(href='/my-bots/new') Create a Bot
+						
+					else
+						form(method='post' action='/challenges/#{challenge.id}/respond')
+							.modal-body
+								.form-group
+									select.form-control(name='bot')
+										for bot in bots
+											option(value='#{bot.id}') #{bot.name}
+
+							.modal-footer
+									button.btn.btn-primary(type='submit') Respond

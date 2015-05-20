@@ -20,7 +20,7 @@ block container
 				for challenge in newChallenges
 					a.list-group-item(href='/challenges/#{challenge.id}') 
 						span(data-ts='#{moment(challenge.created).unix()}' data-date-fmt='lll') #{moment(challenge.created).format('lll')}
-						|  &mdash; #{challenge.opponentOf(user).user.name}
+						|  &mdash; #{challenge.opponentOf(user).user ? challenge.opponentOf(user).user.name : challenge.opponentOf(user).stub.name}
 
 	else
 		.panel.panel-default

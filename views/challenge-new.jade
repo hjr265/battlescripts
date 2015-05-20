@@ -8,25 +8,31 @@ block container
 		.panel-body
 			.row
 				.col-xs-8.col-xs-offset-2
-					p
-						i Challenge a friend with one of your bots by typing their Twitter handle (e.g. @example) or email address (e.g. someone@example.com) in the "Opponent" field.
-					br
+					if bots.length === 0
+						p To challenge a friend, you need to 
+							a(href='/my-bots/new') create a bot
+							|  first.
+						
+					else
+						p
+							i Challenge a friend with one of your bots by typing their Twitter handle (e.g. @example) or email address (e.g. someone@example.com) in the "Opponent" field.
+						br
 
-					form(method='post')
-						.form-group
-							select.form-control(name='bot')
-								for bot in bots
-									option(value='#{bot.id}') #{bot.name}
-						.form-group
-							input.form-control(name='opponent' placeholder='Opponent' data-toggle='tooltip' data-placement='right' title='Challenge a friend by typing their Twitter handle (e.g. @example) or email address (e.g. someone@example.com) here' data-container='body')
+						form(method='post')
+							.form-group
+								select.form-control(name='bot')
+									for bot in bots
+										option(value='#{bot.id}') #{bot.name}
+							.form-group
+								input.form-control(name='opponent' placeholder='Opponent' data-toggle='tooltip' data-placement='right' title='Challenge a friend by typing their Twitter handle (e.g. @example) or email address (e.g. someone@example.com) here' data-container='body')
 
-						.form-group
-							textarea.form-control(name='message' placeholder='Message' maxlength='256' data-toggle='tooltip' data-placement='right' title='Let your friend know who eats metal for breakfast' data-container='body')
+							.form-group
+								textarea.form-control(name='message' placeholder='Message' maxlength='256' data-toggle='tooltip' data-placement='right' title='Let your friend know who eats metal for breakfast' data-container='body')
 
-						.btn-group.pull-right
-							button.btn.btn-primary(type='submit') Create
-						.btn-group
-							a.btn.btn-default(href='/my-bots') Cancel
+							.btn-group.pull-right
+								button.btn.btn-primary(type='submit') Create
+							.btn-group
+								a.btn.btn-default(href='/my-bots') Cancel
 
 block append scripts
 	script(type='text/javascript').
