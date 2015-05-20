@@ -40,7 +40,6 @@ block append scripts
 				url: '/battles/'+battleId+'/ended.json',
 				cache: false,
 				success: function(ended) {
-					console.log('!')
 					if(!ended) {
 						return setTimeout(function() {
 							poll()
