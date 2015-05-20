@@ -36,8 +36,10 @@ block append scripts
 		
 		function poll() {
 			$.getJSON('/battles/'+battleId+'/ended.json', function(ended) {
-				if(!ended) {
-					return setTimeout(poll, 750)
+				if(ended !== true) {
+					return setTimeout(function() {
+						poll()
+					}, 750)
 				}
 				
 				$('h4').text('Battle has ended')
