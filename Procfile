@@ -1,2 +1,2 @@
 web: node app.js
-kue: node kue.js
+kue: node --expose-gc kue.js
