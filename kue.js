@@ -20,3 +20,6 @@ queue = kue.createQueue({
 })
 
 queue.process('battle', workers.battle)
+queue.on('job complete', function() {
+	process.exit(0)
+})
