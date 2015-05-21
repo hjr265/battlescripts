@@ -37,17 +37,22 @@ block append scripts
 		function poll() {
 			$.ajax({
 				dataType: 'json',
-				url: '/battles/'+battleId+'/ended.json',
+				url: '/battles/'+battleId+'/status.json',
 				cache: false,
-				success: function(ended) {
-					if(!ended) {
-						return setTimeout(function() {
-							poll()
-						}, 750)
+				success: function(status) {
+					switch(status) {
+						case 'ended':
+							$('h4').text('Battle has ended')
+							location.reload()
+							return
+						
+						case 'started':
+							$('h4').text('Battle has started')
 					}
 					
-					$('h4').text('Battle has ended')
-					location.reload()
+					setTimeout(function() {
+						poll()
+					}, 750)
 				},
 				error: function() {
 					return setTimeout(function() {
