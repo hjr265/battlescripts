@@ -3,8 +3,14 @@ var async = require('async')
 var express = require('express')
 var mongoose = require('mongoose')
 var passport = require('passport')
+var raven = require('raven')
 var User = require('./lib/user')
 var vm = require('vm')
+
+if(process.env.SENTRY_URL) {
+	var c = new raven.Client(process.env.SENTRY_URL)
+	c.patchGlobal()
+}
 
 mongoose.connect(process.env.MONGO_URL || process.env.MONGOLAB_URI, function(err) {
 	if(err) {
@@ -33,6 +39,10 @@ var app = express()
 	next()
 })
 .use(require('./lib/router'))
+
+if(process.env.SENTRY_URL) {
+	app.use(raven.middleware.express(process.env.SENTRY_URL))
+}
 
 _.extend(app.locals, {
 	_: _,
