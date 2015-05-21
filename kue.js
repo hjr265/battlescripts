@@ -1,6 +1,12 @@
 var kue = require('kue')
 var mongoose = require('mongoose')
+var raven = require('raven')
 var workers = require('./lib/workers')
+
+if(process.env.SENTRY_URL) {
+	var c = new raven.Client(process.env.SENTRY_URL)
+	c.patchGlobal()
+}
 
 mongoose.connect(process.env.MONGO_URL || process.env.MONGOLAB_URI, function(err) {
 	if(err) {
