@@ -84,7 +84,12 @@ block container
 									else
 										case move.fail
 											when 'turn#attack erred'
-												|  erred.. battle forfeited
+												if battle.parties[move.botNo].user.id.toString() === user.id.toString()
+													|  
+													abbr(title='#{move.data.error}' data-toggle='tooltip') erred
+													| .. battle forfeited
+												else
+													|  erred.. battle forfeited
 
 											when 'turn#attack not-called'
 												|  failed to attack.. battle forfeited
