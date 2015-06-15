@@ -4,6 +4,12 @@ block container
 	.panel.panel-default.panel-spacious
 		.panel-body
 			.row
+				.col-xs-12.text-center
+					h2 #{challenge.game}
+					br
+					br
+					
+			.row
 				for party, i in challenge.parties
 					.col-xs-5.text-center
 						if party.bot
@@ -51,7 +57,7 @@ block container
 					
 					if bots.length === 0
 						.modal-body
-							p Looks like you have not created a bot yet.
+							p Looks like you have not created a bot yet for this game.
 							
 						.modal-footer
 							a.btn.btn-primary(href='/my-bots/new') Create a Bot

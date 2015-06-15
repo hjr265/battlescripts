@@ -17,6 +17,11 @@ block container
 					form(method='post')
 						.form-group
 							input.form-control(name='name' rows='8' placeholder='Name' data-toggle='tooltip' data-placement='right' title='Make your bot feel special, give it a name' data-container='body')
+						.form-group
+							if games.length > 1
+								select.form-control(name='game' data-toggle='tooltip' data-placement='right' title='Pick a game type for this bot' data-container='body')
+									for game in games
+										option(value='#{game}') #{game}
 						.form-group(data-toggle='tooltip' data-placement='right' title='Define a JavaScript object constructor "Bot", and add the method "play" to its prototype. You can learn more by clicking on "Help" at the right of the navbar' data-container='body')
 							textarea.form-control(name='code' rows='8' placeholder='Code').
 								function Bot() {

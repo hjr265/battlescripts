@@ -86,6 +86,8 @@ block container
 							h5.text-muted Score: #{Math.round(bot.score)}, Wins: #{bot.stats.wins}
 						h5
 							a(href='/bots/#{bot.id}') #{bot.name}
+								if env.OPT_GAMES.split(',').length > 1
+									|  (#{bot.game})
 		
 		#mdlDelete.modal.fade
 			.modal-dialog

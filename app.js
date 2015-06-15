@@ -46,7 +46,8 @@ if(process.env.SENTRY_URL) {
 
 _.extend(app.locals, {
 	_: _,
-	moment: require('moment')
+	moment: require('moment'),
+	env: process.env
 })
 
 var server = require('http').createServer(app)

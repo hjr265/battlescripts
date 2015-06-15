@@ -23,6 +23,8 @@ block container
 								select.form-control(name='bot')
 									for bot in bots
 										option(value='#{bot.id}') #{bot.name}
+											if env.OPT_GAMES.split(',').length > 1
+												|  (#{bot.game})
 							.form-group
 								input.form-control(name='opponent' placeholder='Opponent' data-toggle='tooltip' data-placement='right' title='Challenge a friend by typing their Twitter handle (e.g. @example) or email address (e.g. someone@example.com) here' data-container='body')
 

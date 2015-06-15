@@ -1,0 +1,210 @@
+extends layout
+
+block container
+	.row
+		.col-xs-6
+			h2 Battle Results
+		.col-xs-6
+			.btn-toolbar.pull-right
+				if battle.parties[0].user.id.toString() !== battle.parties[1].user.id.toString()
+					for party, botNo in battle.parties
+						if party.user.id.toString() === user.id.toString()
+							.btn-group
+								a.btn.btn-primary(href='/my-challenges/new#bot=#{party.bot.id}&opponent=#{battle.parties[1-botNo].user.handle}') Re-challenge
+					.btn-group &nbsp;&nbsp;
+					
+				.btn-group
+					button.btn.btn-default.btn-play Re-play
+				.btn-group
+					button.btn.btn-default.btn-stop(style='display: none;') Pause
+
+				.btn-group
+					button.btn.btn-default.btn-fast.active Fast
+					button.btn.btn-default.btn-slow Slow
+					button.btn.btn-default.btn-slower Slower
+					button.btn.btn-default.btn-step Step
+	br
+
+	.panel.panel-default
+		.panel-body
+			.row
+				for party, botNo in battle.parties
+					.col-md-6
+						.alert(class='#{party.winner ? (party.user.id.toString() === user.id.toString() ? "alert-success" : "alert-danger") : ""}')
+							if party.winner
+								.pull-right
+									i.fa.fa-trophy.fa-5x
+							h4 #{party.bot.name}
+							p
+								small by #{party.user.name}
+
+			.row
+				.col-md-4.col-md-offset-4
+					table.table.table-bordered
+						tbody
+							for row, r in battle.parties[0].grid
+								tr
+									for cell in row
+										td.text-center
+											if cell.mark
+												if cell.winning
+													b #{cell.mark}
+												else
+													| #{cell.mark}
+											else
+												| &nbsp;
+
+		hr
+		.panel-body
+			.row
+				.col-xs-6
+					div(style='max-height: 192px; overflow-y: auto;')
+						ul.ul-moves(style='padding: 2px; list-style: none;')
+							for move in battle.moves.reverse()
+								li(data-move='#{JSON.stringify(move)}')
+									b #{battle.parties[move.botNo].bot.name}
+									if move.okay
+										|  marked (#{move.data.x+1}, #{move.data.y+1}) with #{'XO'[move.botNo]}
+
+									else
+										case move.fail
+											when 'turn#attack erred'
+												if battle.parties[move.botNo].user.id.toString() === user.id.toString()
+													|  
+													abbr(title='#{move.data.error}' data-toggle='tooltip') erred
+													| .. battle forfeited
+												else
+													|  erred.. battle forfeited
+
+											when 'turn#mark not-called'
+												|  failed to mark.. battle forfeited
+					br
+					br
+					p.text-right
+						a(href='/battles/#{battle.id}.json') Export as JSON
+				
+				.col-xs-6
+					if battle.parties[0].user.id.toString() !== battle.parties[1].user.id.toString()
+						for party, botNo in battle.parties
+							if party.user.id.toString() === user.id.toString()
+								if otherBots && otherBots.length > 0
+									h4 Other bots you may want to challenge
+									ul
+										for otherBot in otherBots
+											li #{otherBot.name} 
+												small  by&#032;
+													a(href='/my-challenges/new#bot=#{party.bot.id}&opponent=#{otherBot.author.handle}') #{otherBot.author.name}
+
+	for party, botNo in battle.parties
+		if party.user.id.toString() !== user.id.toString()
+			- continue
+
+		.modal.fade(id='mdlSource-#{botNo}')
+			.modal-dialog.modal-lg
+				.modal-content
+					.modal-header
+						h4.modal-title Source: #{party.bot.name}
+
+					.modal-body
+						pre.pre-scrollable #{party.bot.code}
+
+block append styles
+	style(type='text/css').
+		table td {
+			width: 54px;
+			-webkit-transition: background-color 100ms linear;
+			-moz-transition: background-color 100ms linear;
+			-o-transition: background-color 100ms linear;
+			-ms-transition: background-color 100ms linear;
+			transition: background-color 100ms linear;
+		}
+
+block append scripts
+	script(type='text/javascript').
+		(function() {
+			var i = 0
+			var moves = []
+
+			$('.ul-moves li').each(function() {
+				moves.unshift($(this).data('move'))
+			})
+
+			var playTimer = null
+
+			function play() {
+				$('.btn-play').hide()
+				$('.btn-stop').show()
+
+				if(i === moves.length) {
+					i = 0
+					stop()
+					$('.ul-moves h4').fadeIn()
+					return
+				}
+				if(i === 0) {
+					$('.ul-moves h4').hide()
+					$('table td').css({
+						color: '#fff'
+					})
+					$('.count span').text(0)
+				}
+
+				$('.ul-moves li').slice(0, $('.ul-moves li').length-i).hide()
+				$('.ul-moves li').slice($('.ul-moves li').length-i-1).show()
+
+				var move = moves[i]
+				var $td = $('table').find('tr').eq(move.data.y).find('td').eq(move.data.x)
+				$td.css({
+					color: ''
+				})
+				++i
+
+				$('.count span').eq(move.botNo).text(parseInt($('.count span').eq(move.botNo).text())+1)
+
+				var delay = 0
+				switch(true) {
+					case $('.btn-fast').hasClass('active'):
+						delay = 10
+						break
+
+					case $('.btn-slow').hasClass('active'):
+						delay = 100
+						break
+
+					case $('.btn-slower').hasClass('active'):
+						delay = 500
+						break
+
+					case $('.btn-step').hasClass('active'):
+						stop()
+						return
+				}
+				playTimer = setTimeout(function() {
+					play()
+				}, delay)
+			}
+
+			function stop() {
+				$('.btn-stop').hide()
+				$('.btn-play').text(i === 0 ? 'Re-play' : ($('.btn-step').hasClass('active') ? 'Next' : 'Resume')).show()
+
+				clearTimeout(playTimer)
+			}
+
+			$('.btn-play').click(function() {
+				play()
+			})
+			$('.btn-stop').click(function() {
+				stop()
+			})
+
+			$('.btn-fast, .btn-slow, .btn-slower, .btn-step').on('click', function() {
+				$(this).addClass('active').siblings().removeClass('active')
+
+				if($('.btn-step').hasClass('active')) {
+					$('.btn-play').text('Next')
+				} else {
+					$('.btn-play').text('Re-play')
+				}
+			})
+		})()
