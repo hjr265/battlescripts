@@ -19,7 +19,9 @@ queue = kue.createQueue({
 	jobEvents: false
 })
 
-queue.process('battle', workers.battle)
-queue.on('job complete', function() {
-	process.exit(0)
+queue.process('battle', function(job, done) {
+	queue.shutdown(80000, function(err) {
+		process.exit(0)
+	})
+	workers.battle(job, done)
 })
